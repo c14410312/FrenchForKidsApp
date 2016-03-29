@@ -32,7 +32,7 @@ public class Application extends PApplet {
 	Minim minim;
 	AudioPlayer track;
 	
-
+    //yes
 	//global arrayList to hold the loaded category
 	ArrayList<CurrentCategory> CurCatItems = new ArrayList<CurrentCategory>();
 	
