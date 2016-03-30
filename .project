@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/Funnier.ttf</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/data/Funnier.ttf</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -32,9 +32,12 @@ public class Application extends PApplet {
 	ControlP5 menu;
 	ControlP5 mode;
 	ControlP5 start;
+	ControlP5 replaySound;
 	PImage img;
 	Minim minim;
 	AudioPlayer track;
+	PImage sound;
+	PFont myFont;
 	
     //yes
 	//global arrayList to hold the loaded category
@@ -44,6 +47,9 @@ public class Application extends PApplet {
 	    size(500,500);
 	    background(255);
 	    screen = 0;
+	   // String[] fontList = PFont.list();
+	    //printArray(fontList);
+	    myFont = createFont("Funnier.ttf", 32);
 	    
 		
 	    //****************BUTTONS**********************
@@ -78,6 +84,7 @@ public class Application extends PApplet {
   		 .setSize(200,50)
   		 ;
 	    
+  		
 	    //Navigation Menu Buttons
 	    menu = new ControlP5(this);
 	    menu.addButton("Back")
@@ -153,7 +160,8 @@ public class Application extends PApplet {
 	
 	public void draw(){
 		background(255);
-		textSize(24);
+		textFont(myFont);
+		textSize(32);
 		count = 1;
 		
 		//menu
@@ -287,7 +295,7 @@ public class Application extends PApplet {
 	    	i = 0;
 	    }
 	    if(i < 0 ){
-	    	i = maxSize + 1;
+	    	i = maxSize;
 	    }
 	        
 	    //gets the matching Text for value in x
@@ -298,6 +306,7 @@ public class Application extends PApplet {
 	    imageMode(CENTER);
 	    image(img, width/2, height/2, 200,200);
 	    
+	    textFont(myFont);
 	    textAlign(CENTER,CENTER);
 	    fill(0);
 	    textSize(24);
