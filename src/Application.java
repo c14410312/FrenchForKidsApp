@@ -26,10 +26,12 @@ public class Application extends PApplet {
 	//used when looping through the selected category
 	int maxSize = 0;
 	int count = 0;
+	
 	ControlP5 nav;
 	ControlP5 cat;
 	ControlP5 menu;
 	ControlP5 mode;
+	ControlP5 start;
 	PImage img;
 	Minim minim;
 	AudioPlayer track;
@@ -41,10 +43,40 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 1;
+	    screen = 0;
 	    
 		
 	    //****************BUTTONS**********************
+	    
+	    //start Menu Buttons
+	  
+  		start = new ControlP5(this);
+  		start.addButton("Lets Start!")
+  	     .setValue(1)
+  	     .setColorActive(125)
+  	     .setColorBackground(0) 
+  	     .setPosition(150,150)
+  	     .setSize(200,50)
+  	     .addCallback(new CallbackListener() {
+	        @SuppressWarnings("deprecation")
+			public void controlEvent(CallbackEvent event) {
+	           if (event.getAction() == ControlP5.ACTION_RELEASED) {
+	             println("button released.");
+	             screen = 1;
+	           }
+	         }
+	       })
+  	     ;
+  		start.addButton("About")
+  		 .setValue(2)
+  		 .setPosition(150,200)
+  		 .setSize(200,50)
+  		 ;
+  		start.addButton("Exit")
+  		 .setValue(3)
+  		 .setPosition(150,250)
+  		 .setSize(200,50)
+  		 ;
 	    
 	    //Navigation Menu Buttons
 	    menu = new ControlP5(this);
@@ -126,31 +158,47 @@ public class Application extends PApplet {
 		
 		//menu
 		if(screen == 0){
-			startScreen();
+			
+			//visible buttons
+			start.setVisible(true);
+			//invisible buttons
+			menu.setVisible(false);
 			nav.setVisible(false);
 			cat.setVisible(false);
+			mode.setVisible(false);
 		}
 		//mode
 		if(screen == 1){
+			//visible buttons
 			modeSelection();
+			mode.setVisible(true);
+			menu.setVisible(true);
+			//invisible buttons
+			start.setVisible(false);
 			nav.setVisible(false);
 			cat.setVisible(false);
-			mode.setVisible(true);
 		}
 		//category
 		if(screen == 2){
 			categories();
+			//visible buttons
+			cat.setVisible(true);
+			menu.setVisible(true);
+			//invisible buttons
 			nav.setVisible(false);
 			mode.setVisible(false);
-			cat.setVisible(true);
+			
 		}
 		//words
 		if(screen == 3){
-			cat.setVisible(false);
+			//visible buttons
+			menu.setVisible(true);
 			if(buttonClicked){
 				loadCurrentCategory(catName);
 				navigateCat(catName);
 			}
+			//invisible buttons
+			cat.setVisible(false);
 			
 		}
 		//activity content
@@ -164,25 +212,7 @@ public class Application extends PApplet {
 	}
 	
 	public void startScreen(){
-		//create instance of control p5
-		/*p5 = new ControlP5(this);
-		cat.addButton("Lets Start!")
-	     .setValue(1)
-	     .setColorActive(125)
-	     .setColorBackground(0) 
-	     .setPosition(150,150)
-	     .setSize(200,50)
-	     ;
-		cat.addButton("About")
-		 .setValue(2)
-		 .setPosition(150,200)
-		 .setSize(200,50)
-		 ;
-		cp5.addButton("Exit")
-		 .setValue(3)
-		 .setPosition(150,250)
-		 .setSize(200,50)
-		 ;*/
+		
 		
 	}
 	
@@ -276,6 +306,14 @@ public class Application extends PApplet {
 	 
 	//****************BUTTON EVENTS*******************************
 	 
+	 //_____MENU BUTTON EVENTS_____
+	 public void Exit(){
+		 if(count > 0){
+			 exit();
+		 }
+	 }
+	 
+	 //______NAVIGATION BUTTON EVENTS_____
 	 
 	 //moves position of cards to the right
 	 public void navRight(){
@@ -297,7 +335,8 @@ public class Application extends PApplet {
 	 }
 	 
 	 
-	 //events to deal with button clicks from the categories
+	 //_____CATEGORY BUTTON EVENTS_____
+	 
 	 //if the button numbers is selected it loads that into the current category
 	public void Numbers(){
 		if(count > 0){
