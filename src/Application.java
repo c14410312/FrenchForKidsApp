@@ -81,6 +81,7 @@ public class Application extends PApplet {
 	
 	public void draw(){
 		background(255);
+		textSize(24);
 		
 		//menu
 		if(screen == 0){
