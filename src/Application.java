@@ -47,8 +47,7 @@ public class Application extends PApplet {
 	    size(500,500);
 	    background(255);
 	    screen = 0;
-	   // String[] fontList = PFont.list();
-	    //printArray(fontList);
+	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
 		
@@ -311,6 +310,7 @@ public class Application extends PApplet {
 	    fill(0);
 	    textSize(24);
 	    text(CurCatItems.get(i).fr,width/2, height-border*2);
+	    text((i+1) + "/" + (maxSize+ 1), border*2 , border*2 );
 	 }
 	 
 	//****************BUTTON EVENTS*******************************
@@ -362,6 +362,15 @@ public class Application extends PApplet {
 			//ensure to reinitialize i to ensure it ends up at the start of the list
 			i= 0;
 			catName = "Alphabet";
+			buttonClicked = true;
+			screen = 3;
+		}
+	}
+	public void Family(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
+			catName = "Family";
 			buttonClicked = true;
 			screen = 3;
 		}
