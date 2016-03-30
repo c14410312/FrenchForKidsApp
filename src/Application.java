@@ -29,6 +29,7 @@ public class Application extends PApplet {
 	ControlP5 nav;
 	ControlP5 cat;
 	ControlP5 menu;
+	ControlP5 mode;
 	PImage img;
 	Minim minim;
 	AudioPlayer track;
@@ -40,12 +41,12 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 2;
+	    screen = 1;
 	    
 		
 	    //****************BUTTONS**********************
 	    
-	    //Menu Buttons
+	    //Navigation Menu Buttons
 	    menu = new ControlP5(this);
 	    menu.addButton("Back")
 	    .setValue(1)
@@ -61,6 +62,28 @@ public class Application extends PApplet {
 	         }
 	       })
 	     ;
+	    //Mode Selection Buttons
+	    mode = new ControlP5(this);
+	    mode.addButton("Words")
+	     .setValue(1)
+	     .setPosition(150,150)
+	     .setSize(200,50)
+	     .addCallback(new CallbackListener() {
+		        @SuppressWarnings("deprecation")
+				public void controlEvent(CallbackEvent event) {
+		           if (event.getAction() == ControlP5.ACTION_RELEASED) {
+		             println("button released.");
+		             screen =2;
+		           }
+		         }
+		       })
+	     ;
+	    mode.addButton("Games")
+	     .setValue(1)
+	     .setPosition(150,200)
+	     .setSize(200,50)
+	     ;
+	    		 
 	    //Category Buttons
 	    cat = new ControlP5(this);
 		cat.addButton("Numbers")
@@ -99,6 +122,7 @@ public class Application extends PApplet {
 	public void draw(){
 		background(255);
 		textSize(24);
+		count = 1;
 		
 		//menu
 		if(screen == 0){
@@ -106,19 +130,21 @@ public class Application extends PApplet {
 			nav.setVisible(false);
 			cat.setVisible(false);
 		}
-		//difficulty
+		//mode
 		if(screen == 1){
-			difficultyScreen();
+			modeSelection();
 			nav.setVisible(false);
 			cat.setVisible(false);
+			mode.setVisible(true);
 		}
 		//category
 		if(screen == 2){
 			categories();
 			nav.setVisible(false);
+			mode.setVisible(false);
 			cat.setVisible(true);
 		}
-		//words/sentences
+		//words
 		if(screen == 3){
 			cat.setVisible(false);
 			if(buttonClicked){
@@ -160,7 +186,7 @@ public class Application extends PApplet {
 		
 	}
 	
-	public void difficultyScreen(){
+	public void modeSelection(){
 		/*cp5 = new ControlP5(this);
 		cp5.addButton("Beginner")
 	     .setValue(1)
@@ -186,34 +212,52 @@ public class Application extends PApplet {
 	 */
 	 void loadCurrentCategory(String catName){
 		    //cat will be the selected category by the user and will place the name into cat.
+		 	CurCatItems.clear();
 		    String cat = catName;
 		    String[] lines = loadStrings("Text/"+cat+".csv");
-		    maxSize = lines.length;
-		    //for loop to load in each line from csv file
-		    for (int i = 0 ; i < lines.length ; i ++){
-		        //reads in each line from the selected text file  
-		        CurrentCategory curCatItem = new CurrentCategory(lines[i]);
-		        CurCatItems.add(curCatItem);
+		    
+		    
+		    System.out.println(CurCatItems.size());
+	    	//if list is already empty
+	    	if(CurCatItems.size() == 0){
+	    		
+	    	
+	    		for(int i = 0 ; i < lines.length; i++){
+	    			//reads in each line from the selected text file  
+		    		CurrentCategory curCatItem = new CurrentCategory(lines[i]);
+		        	CurCatItems.add(curCatItem);
+		        	maxSize = i;
+		        	System.out.println("loading new" + cat);
+	    		}
+	    		System.out.println(CurCatItems.size());
+	    	}
+	    	else{
+	    		for(int i = 0 ; i < lines.length; i++){
+	    			//reads in each line from the selected text file  
+	    			CurrentCategory curCatItem = new CurrentCategory(lines[i]);
+		    		CurCatItems.set(i,curCatItem);
+		    		maxSize = i;
+		    		System.out.println("replacing with" + cat);
+	    		}
+	    		System.out.println(CurCatItems.size());
+	    		
+	    	}
 		        
-		      //puts the current value of the list in x
-		      
-		      //System.out.println(x);
-		      
-		       
-		    } 
-		  }
+		  } 
+
 	 public void navigateCat(String catName){
-		 
+		
+	    
 		String cat = catName;
 		//sets navigation buttons to visible
 		nav.setVisible(true);
 	    
 		//handles if i goes beyond the array
-	    if(i == maxSize){
+	    if(i == maxSize + 1){
 	    	i = 0;
 	    }
 	    if(i < 0 ){
-	    	i = maxSize;
+	    	i = maxSize + 1;
 	    }
 	        
 	    //gets the matching Text for value in x
@@ -257,21 +301,22 @@ public class Application extends PApplet {
 	 //if the button numbers is selected it loads that into the current category
 	public void Numbers(){
 		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
 			catName = "Numbers";
 			buttonClicked = true;
 			screen = 3;
 		}
-		count = 1;
 	}
 	//if the button Alphabet is selected it loads that into the current category
 	public void Alphabet(){
-		count = 0;
 		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
 			catName = "Alphabet";
 			buttonClicked = true;
 			screen = 3;
 		}
-		count = 1;
 	}
 	
 	public void Back(){
