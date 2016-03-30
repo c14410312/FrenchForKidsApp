@@ -28,6 +28,7 @@ public class Application extends PApplet {
 	int count = 0;
 	ControlP5 nav;
 	ControlP5 cat;
+	ControlP5 menu;
 	PImage img;
 	Minim minim;
 	AudioPlayer track;
@@ -44,6 +45,22 @@ public class Application extends PApplet {
 		
 	    //****************BUTTONS**********************
 	    
+	    //Menu Buttons
+	    menu = new ControlP5(this);
+	    menu.addButton("Back")
+	    .setValue(1)
+	     .setPosition(5,5)
+	     .setSize(150,50)
+	     .addCallback(new CallbackListener() {
+	        @SuppressWarnings("deprecation")
+			public void controlEvent(CallbackEvent event) {
+	           if (event.getAction() == ControlP5.ACTION_RELEASED) {
+	             println("button released.");
+	             screen --;
+	           }
+	         }
+	       })
+	     ;
 	    //Category Buttons
 	    cat = new ControlP5(this);
 		cat.addButton("Numbers")
@@ -166,12 +183,6 @@ public class Application extends PApplet {
 	}
 	
 	/*Function to load in chosen category
-	 * cat = chosenCategory(e.g Numbers)(button.getLabel())
-	 * load in the text file belonging to that category("Numbers.txt")
-	 * as each number is loaded in from the text file within that loop we will import the image and sound associated with that number
-	 * e.g first line from text file = 1
-	 * load in 1.jpg, 1.mp3
-	 * when the user clicks the arrow for next the loop continues to the next i. 
 	 */
 	 void loadCurrentCategory(String catName){
 		    //cat will be the selected category by the user and will place the name into cat.
@@ -219,6 +230,9 @@ public class Application extends PApplet {
 	    text(CurCatItems.get(i).fr,width/2, height-border*2);
 	 }
 	 
+	//****************BUTTON EVENTS*******************************
+	 
+	 
 	 //moves position of cards to the right
 	 public void navRight(){
 		 i++;
@@ -238,8 +252,9 @@ public class Application extends PApplet {
          track.play(); 
 	 }
 	 
-	 //****************BUTTON EVENTS*******************************
+	 
 	 //events to deal with button clicks from the categories
+	 //if the button numbers is selected it loads that into the current category
 	public void Numbers(){
 		if(count > 0){
 			catName = "Numbers";
@@ -248,13 +263,19 @@ public class Application extends PApplet {
 		}
 		count = 1;
 	}
+	//if the button Alphabet is selected it loads that into the current category
 	public void Alphabet(){
-		if(count > 1){
+		count = 0;
+		if(count > 0){
 			catName = "Alphabet";
 			buttonClicked = true;
 			screen = 3;
 		}
-		count = 2;
+		count = 1;
+	}
+	
+	public void Back(){
+		System.out.println("Button Called");
 	}
 
 }
