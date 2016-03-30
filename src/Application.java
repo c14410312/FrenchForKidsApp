@@ -208,9 +208,11 @@ public class Application extends PApplet {
 			cat.setVisible(false);
 			
 		}
-		//activity content
+		//Matching picture word game
 		if(screen == 4){
-			
+			loadCurrentCategory("Numbers");
+			MatchGame matchGame = new MatchGame();
+			matchGame.start();
 		}
 	}
 	
@@ -381,3 +383,16 @@ public class Application extends PApplet {
 	}
 
 }
+/*______________Picture and words Matching Game Notes____________________
+ * User selects games and is presented with categories
+ * Loading in the list into the picture match game
+ * we need 10 clickable images and ten clickable label panels to match
+ * Each label must have a matching image on the board
+ * Both images and labels must be placed randomly into a matrix like structure
+ * user must then select a picture and a matching label.
+ * if user selects 2 pictures or 2 labels they are shown an error handling exception
+ * if the user selects a wrong option they are shown an error handling exception.
+ * if the user gets a right combo the two selected objects are removed from the matrix structure.
+ * when there are no objects left the user wins.
+ * */
+ 
