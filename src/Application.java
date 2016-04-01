@@ -46,10 +46,13 @@ public class Application extends PApplet {
 	//String array to hold ten random items for match game
 	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
 	
+	//arrayList to hold objects created for games
+	ArrayList<GameObject> gameObject = new ArrayList<GameObject>();
+	
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 4;
+	    screen = 0;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
