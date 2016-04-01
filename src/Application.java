@@ -43,10 +43,13 @@ public class Application extends PApplet {
 	//global arrayList to hold the loaded category
 	ArrayList<CurrentCategory> CurCatItems = new ArrayList<CurrentCategory>();
 	
+	//String array to hold ten random items for match game
+	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
+	
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 0;
+	    screen = 4;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -210,9 +213,27 @@ public class Application extends PApplet {
 		}
 		//Matching picture word game
 		if(screen == 4){
-			loadCurrentCategory("Numbers");
-			MatchGame matchGame = new MatchGame();
-			matchGame.start();
+			
+			//only create one game when button clicked. add a function within the button so this occurs
+			//load the chosen category 
+			if(keyPressed)
+			{
+				if(key == '1')
+				{
+					//need to change the parameter
+					loadCurrentCategory("Numbers");
+					//Pass the arraylist to the function
+					chooseRandomItems(CurCatItems);
+					for(int i = 0; i < randomItems.size(); i ++)
+					{
+						System.out.println(randomItems.get(i).eng);
+					}
+					//create a function to chose ten random items from the category and place them in the array 
+					MatchGame matchGame = new MatchGame();
+					matchGame.start("Numbers");
+			
+				}
+			}
 		}
 	}
 	
@@ -256,7 +277,7 @@ public class Application extends PApplet {
 		    String[] lines = loadStrings("Text/"+cat+".csv");
 		    
 		    
-		    System.out.println(CurCatItems.size());
+		    // System.out.println(CurCatItems.size());
 	    	//if list is already empty
 	    	if(CurCatItems.size() == 0){
 	    		
@@ -268,7 +289,7 @@ public class Application extends PApplet {
 		        	maxSize = i;
 		        	System.out.println("loading new" + cat);
 	    		}
-	    		System.out.println(CurCatItems.size());
+	    		//System.out.println(CurCatItems.size());
 	    	}
 	    	else{
 	    		for(int i = 0 ; i < lines.length; i++){
@@ -380,6 +401,30 @@ public class Application extends PApplet {
 	
 	public void Back(){
 		System.out.println("Button Called");
+	}
+	
+	//chooses ten random items from a category and adds them to the array list Random items 
+	public void chooseRandomItems(ArrayList<CurrentCategory> arrayList){
+		int size = arrayList.size();
+		//while the randomItems arraylist is not equal to ten loop through
+		for(int i = 0 ; i < 10 ; i++){
+			if(randomItems.size() < 10){
+				//create random i on each loop
+				int j = (int) random(0,size-1);
+				
+				//select item from arrayList
+				randomItems.add(arrayList.get(j));
+				arrayList.remove(j);
+				size = arrayList.size();
+				println(randomItems.size());
+			}
+			
+			else{
+				return;
+			}
+		}
+		
+		
 	}
 
 }
