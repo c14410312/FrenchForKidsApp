@@ -276,6 +276,7 @@ public class Application extends PApplet {
 				for(int i = 0; i < gameObjects.size()-1; i++){
 					GameObject go = gameObjects.get(i);
 					go.render();
+					go.update();
 				}
 			}
 		}
