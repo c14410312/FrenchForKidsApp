@@ -5,11 +5,11 @@ public class Tile extends GameObject {
 	float x, y, w;
 	PApplet parent;
 	
-	Tile(PApplet p){
+	Tile(PApplet p, float x, float y){
 		parent = p;
-		this.x = 100;
-		this.y = 100;
-		this.w = 150;
+		this.x = x;
+		this.y = y;
+		this.w = 80;
 	}
 	
 	public void render(){

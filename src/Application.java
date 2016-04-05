@@ -128,6 +128,15 @@ public class Application extends PApplet {
 	     .setValue(1)
 	     .setPosition(150,200)
 	     .setSize(200,50)
+	     .addCallback(new CallbackListener() {
+		        @SuppressWarnings("deprecation")
+				public void controlEvent(CallbackEvent event) {
+		           if (event.getAction() == ControlP5.ACTION_RELEASED) {
+		             println("button released.");
+		             screen = 4;
+		           }
+		         }
+		       })
 	     ;
 	    		 
 	    //Category Buttons
@@ -218,6 +227,14 @@ public class Application extends PApplet {
 		}
 		//Matching picture word game
 		if(screen == 4){
+			nav.setVisible(false);
+			mode.setVisible(false);
+			cat.setVisible(false);
+			menu.setVisible(false);
+			start.setVisible(false);
+			
+			float y = 0;
+			float x = 70;
 			
 			//only create one game when button clicked. add a function within the button so this occurs
 			//load the chosen category 
@@ -233,8 +250,20 @@ public class Application extends PApplet {
 					{
 						System.out.println(randomItems.get(i).eng);
 					}
-					Tile tile = new Tile(this);
-					gameObjects.add(tile);
+					for(int i = 0 ; i < 5; i++){
+						
+						y = 50 + (90 * i);
+						
+						for(int j = 0 ; j < 4; j++){
+							Tile tile = new Tile(this,x,y);
+							gameObjects.add(tile);
+							x += 90;
+						}
+						//reinitialize x before next iteration
+						x = 70;
+						
+						
+					}
 					
 					//make Matchgame Start
 					matchGame = !matchGame;
