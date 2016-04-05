@@ -1,10 +1,16 @@
-import processing.core.*;
-import processing.event.MouseEvent;
 
-public class Tile extends GameObject {
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import processing.core.*;
+
+
+public class Tile extends GameObject implements MouseListener {
 
 	float x, y, w;
 	int color = 0;
+	boolean selected = false;
 	PApplet parent;
 	
 	Tile(PApplet p, float x, float y){
@@ -12,11 +18,16 @@ public class Tile extends GameObject {
 		this.x = x;
 		this.y = y;
 		this.w = 80;
+		parent.addMouseListener(this);
 	}
 	
 	public void render(){
 		if(overTile(x,y,w)){
 			color = 122;
+		}
+		
+		if(selected){
+			color = 190;
 		}
 		else{
 			color = 0;
@@ -43,10 +54,43 @@ public class Tile extends GameObject {
 
 	}
 	
-	//function to check if tile has been selected
-	void mouseClicked(MouseEvent e){
-		if(overTile(x, y, w)){
-			System.out.println("Clicked");
-		}
+	public void mousePressed(){
+		System.out.println("Hello");
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("Mouse Clicked " + e);
+		if(overTile(x,y,w)){
+			selected = !selected;
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }
