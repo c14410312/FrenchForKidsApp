@@ -26,6 +26,8 @@ public class Application extends PApplet {
 	//used when looping through the selected category
 	int maxSize = 0;
 	int count = 0;
+	boolean matchGame;
+
 	
 	ControlP5 nav;
 	ControlP5 cat;
@@ -46,13 +48,13 @@ public class Application extends PApplet {
 	//String array to hold ten random items for match game
 	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
 	
-	//arrayList to hold objects created for games
-	ArrayList<GameObject> gameObject = new ArrayList<GameObject>();
+	ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+	
 	
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 0;
+	    screen = 4;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -231,10 +233,20 @@ public class Application extends PApplet {
 					{
 						System.out.println(randomItems.get(i).eng);
 					}
-					//create a function to chose ten random items from the category and place them in the array 
-					MatchGame matchGame = new MatchGame();
-					matchGame.start("Numbers");
+					Tile tile = new Tile(this);
+					gameObjects.add(tile);
+					
+					//make Matchgame Start
+					matchGame = !matchGame;
+				}
+			}
 			
+			if(!matchGame){
+				
+				
+				for(int i = 0; i < gameObjects.size()-1; i++){
+					GameObject go = gameObjects.get(i);
+					go.render();
 				}
 			}
 		}
