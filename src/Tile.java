@@ -13,13 +13,18 @@ public class Tile extends GameObject implements MouseListener {
 	String id;
 	public boolean selected = false;
 	PApplet parent;
+    int type;
+    PImage img;
+	String cat;
 	
-	Tile(PApplet p, float x, float y, String id){
+	Tile(PApplet p, float x, float y, String id, int type, String cat){
 		parent = p;
 		this.x = x;
 		this.y = y;
 		this.w = 80;
 		this.id = id;
+		this.type = type;
+		this.cat = cat;
 		parent.addMouseListener(this);
 	}
 	
@@ -34,8 +39,23 @@ public class Tile extends GameObject implements MouseListener {
 		else{
 			color = 0;
 		}
-		parent.fill(color);
-		parent.rect(x,y,w,w);
+		if(type == 0){
+			//gets the matching picture for value in x
+		    img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
+		    //gets the matching audio for value in x
+		    //parent.imageMode(PConstants.CENTER);
+		    parent.image(img, x, y, w, w);
+		    parent.noFill();
+			parent.rect(x,y,w,w);
+		}
+		else if(type == 1){
+			parent.fill(color);
+			parent.rect(x, y, w, w);
+			parent.fill(255);
+			parent.textSize(12);
+			parent.textAlign(PConstants.CENTER);
+			parent.text(id,x+w/2,y+w/2);
+		}
 	}
 
 	@Override

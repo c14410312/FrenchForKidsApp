@@ -236,8 +236,11 @@ public class Application extends PApplet {
 			
 			float y = 0;
 			float x = 70;
+			//k used to add category id's to tiles
 			int k = 0;
-			count = 0;
+			//type used to determine whether going to be image or text(0=text, 1 = image)
+			boolean type =true;
+			int t = 0;
 			
 			//only create one game when button clicked. add a function within the button so this occurs
 			//load the chosen category 
@@ -261,11 +264,19 @@ public class Application extends PApplet {
 							//when k gets to 9 reinitialize to zero to add second copy of random items to tiles
 							if(k >= 10){
 								k = 0;
+								type = !type;
 							}
-							Tile tile = new Tile(this,x,y,randomItems.get(k).eng);
+							if(type){
+								t = 0;
+							}
+							if(!type){
+								t = 1;
+							}
+							Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Alphabet");
 							gameObjects.add(tile);
 							x += 90;
 							k++;
+							type = !type;
 						}
 						//reinitialize x before next iteration
 						x = 70;
