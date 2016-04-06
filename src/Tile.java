@@ -10,14 +10,16 @@ public class Tile extends GameObject implements MouseListener {
 
 	float x, y, w;
 	int color = 0;
-	boolean selected = false;
+	String id;
+	public boolean selected = false;
 	PApplet parent;
 	
-	Tile(PApplet p, float x, float y){
+	Tile(PApplet p, float x, float y, String id){
 		parent = p;
 		this.x = x;
 		this.y = y;
 		this.w = 80;
+		this.id = id;
 		parent.addMouseListener(this);
 	}
 	
@@ -39,7 +41,6 @@ public class Tile extends GameObject implements MouseListener {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	//function to check if mouse is over tile
@@ -61,9 +62,9 @@ public class Tile extends GameObject implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Mouse Clicked " + e);
 		if(overTile(x,y,w)){
 			selected = !selected;
+			System.out.println("tile id: " + id);
 		}
 		
 	}

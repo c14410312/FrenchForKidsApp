@@ -26,7 +26,8 @@ public class Application extends PApplet {
 	//used when looping through the selected category
 	int maxSize = 0;
 	int count = 0;
-	boolean matchGame;
+	boolean matchGame = false;
+	static int countSelected = 0;
 
 	
 	ControlP5 nav;
@@ -235,6 +236,8 @@ public class Application extends PApplet {
 			
 			float y = 0;
 			float x = 70;
+			int k = 0;
+			count = 0;
 			
 			//only create one game when button clicked. add a function within the button so this occurs
 			//load the chosen category 
@@ -243,7 +246,7 @@ public class Application extends PApplet {
 				if(key == '1')
 				{
 					//need to change the parameter
-					loadCurrentCategory("Numbers");
+					loadCurrentCategory("Alphabet");
 					//Pass the arraylist to the function
 					chooseRandomItems(CurCatItems);
 					for(int i = 0; i < randomItems.size(); i ++)
@@ -255,9 +258,14 @@ public class Application extends PApplet {
 						y = 50 + (90 * i);
 						
 						for(int j = 0 ; j < 4; j++){
-							Tile tile = new Tile(this,x,y);
+							//when k gets to 9 reinitialize to zero to add second copy of random items to tiles
+							if(k >= 10){
+								k = 0;
+							}
+							Tile tile = new Tile(this,x,y,randomItems.get(k).eng);
 							gameObjects.add(tile);
 							x += 90;
+							k++;
 						}
 						//reinitialize x before next iteration
 						x = 70;
@@ -270,14 +278,21 @@ public class Application extends PApplet {
 				}
 			}
 			
-			if(!matchGame){
+			if(matchGame){
 				
 				
 				for(int i = 0; i < gameObjects.size()-1; i++){
 					GameObject go = gameObjects.get(i);
 					go.render();
 					go.update();
+					
+					if(go instanceof Tile){
+						if(((Tile) go).selected == true){
+							
+						}
+					}
 				}
+				
 			}
 		}
 	}
