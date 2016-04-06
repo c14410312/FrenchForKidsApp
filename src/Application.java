@@ -19,6 +19,7 @@ public class Application extends PApplet {
 	//Global Variables
 	int screen; 
 	int border = 50;
+	int selected = 0;
 	boolean buttonClicked = false;
 	//used to navigate through selected category
 	int i = 0;
@@ -32,6 +33,7 @@ public class Application extends PApplet {
 	
 	ControlP5 nav;
 	ControlP5 cat;
+	ControlP5 gamesCat;
 	ControlP5 menu;
 	ControlP5 mode;
 	ControlP5 start;
@@ -140,7 +142,7 @@ public class Application extends PApplet {
 		       })
 	     ;
 	    		 
-	    //Category Buttons
+	    //Category Buttons (words)
 	    cat = new ControlP5(this);
 		cat.addButton("Numbers")
 	     .setValue(1)
@@ -157,6 +159,15 @@ public class Application extends PApplet {
 		 .setPosition(150,250)
 		 .setSize(200,50)
 		 ;
+		
+		//Category Buttons (Games)
+		gamesCat = new ControlP5(this);
+		gamesCat.addButton("Numbers1")
+	     .setValue(1)
+	     .setPosition(150,150)
+	     .setSize(200,50)
+	     ;
+		
 	    //Navigation for Category words screen 
 	    nav = new ControlP5(this);
 		nav.addBang("navLeft")
@@ -233,83 +244,83 @@ public class Application extends PApplet {
 			cat.setVisible(false);
 			menu.setVisible(false);
 			start.setVisible(false);
+			gamesCat.setVisible(true);
 			
-			float y = 0;
-			float x = 70;
-			//k used to add category id's to tiles
-			int k = 0;
-			//type used to determine whether going to be image or text(0=text, 1 = image)
-			boolean type =true;
-			int t = 0;
+			
 			
 			//only create one game when button clicked. add a function within the button so this occurs
 			//load the chosen category 
-			if(keyPressed)
-			{
-				if(key == '1')
+			
+				if(buttonClicked)
 				{
+					
 					//need to change the parameter
 					loadCurrentCategory("Numbers");
 					//Pass the arraylist to the function
 					chooseRandomItems(CurCatItems);
-					for(int i = 0; i < randomItems.size(); i ++)
-					{
-						System.out.println(randomItems.get(i).eng);
-					}
-					for(int i = 0 ; i < 5; i++){
-						
-						y = 50 + (90 * i);
-						
-						for(int j = 0 ; j < 4; j++){
-							//when k gets to 9 reinitialize to zero to add second copy of random items to tiles
-							if(k >= 10){
-								k = 0;
-								type = !type;
-							}
-							if(type){
-								t = 0;
-							}
-							if(!type){
-								t = 1;
-							}
-							Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Numbers");
-							gameObjects.add(tile);
-							x += 90;
-							k++;
-							type = !type;
-						}
-						//reinitialize x before next iteration
-						x = 70;
-						
-						
-					}
+					//sets up the game
+					setUpMatchGame();
+					
 					
 					//make Matchgame Start
 					matchGame = !matchGame;
+					buttonClicked = false;
 				}
-			}
 			
 			if(matchGame){
 				
-				
-				for(int i = 0; i < gameObjects.size()-1; i++){
+				gamesCat.setVisible(false);
+				for(int i = 0; i < gameObjects.size(); i++){
 					GameObject go = gameObjects.get(i);
 					go.render();
 					go.update();
-					
-					if(go instanceof Tile){
-						if(((Tile) go).selected == true){
-							
-						}
-					}
 				}
-				
+					
+			checkSelected();
 			}
 		}
 	}
 	
 	public static void main(String args[]) {
 	    PApplet.main(new String[] { "--present", "Application" });
+	}
+	
+	public void checkSelected(){
+		String var1 = null;
+		String var2 = null;
+		int var1Pos = 0;
+		int var2Pos = 0;
+		
+		//goes through each object in game object and searches for instances of tile
+		//when found , if it is selected , it is placed in var1
+		//it then checks for a second selection and places it into var2 if that too is selected
+		
+		for(int i = 0 ; i < gameObjects.size(); i ++){
+			GameObject go = gameObjects.get(i);
+			if(var1 == null){
+				if(go instanceof Tile){
+					if(((Tile) go).selected == true){
+						 var1 = ((Tile) go).id;
+						 var1Pos = i;
+					}
+				}
+			}
+			else{
+				if(go instanceof Tile){
+					if(((Tile) go).selected == true){
+						 var2 = ((Tile) go).id;
+						 var2Pos = i-1;
+					}
+				}
+			}
+		}
+		
+		//if the two selected items are equal then they are removed from the board
+		if(var1 == var2 && var1 != null && var2 != null ){
+			System.out.println("Well done");
+			gameObjects.remove(var1Pos);
+			gameObjects.remove(var2Pos);
+		}
 	}
 	
 	public void startScreen(){
@@ -407,6 +418,51 @@ public class Application extends PApplet {
 	    text((i+1) + "/" + (maxSize+ 1), border*2 , border*2 );
 	 }
 	 
+	 
+	 //**************************GAMES SET UPS ***************************************
+	 //_______________________________________________________________________________
+	 
+	 
+	 //sets up the matching game 
+	 public void setUpMatchGame(){
+		 float y = 0;
+		 float x = 70;
+		 //k used to add category id's to tiles
+		 int k = 0;
+		 //type used to determine whether going to be image or text(0=text, 1 = image)
+		 boolean type = false;
+		 int t = 0;
+		 
+		 for(int i = 0 ; i < 5; i++){
+				
+				y = 50 + (90 * i);
+				
+				for(int j = 0 ; j < 4; j++){
+					
+					//when k gets to 9 reinitialize to zero to add second copy of random items to tiles
+					if(k >= 10){
+						k = 0;
+						type = !type;
+					}
+					if(!type){
+						t = 0;
+					}
+					if(type){
+						t = 1;
+					}
+					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Numbers");
+					gameObjects.add(tile);
+					x += 90;
+					type = !type;
+					k++;
+				}
+				//reinitialize x before next iteration
+				x = 70;
+				
+				
+			}
+	 }
+	 
 	//****************BUTTON EVENTS*******************************
 	 
 	 //_____MENU BUTTON EVENTS_____
@@ -467,6 +523,16 @@ public class Application extends PApplet {
 			catName = "Family";
 			buttonClicked = true;
 			screen = 3;
+		}
+	}
+	
+	public void Numbers1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Numbers";
+			buttonClicked = true;
+			screen = 4;
 		}
 	}
 	

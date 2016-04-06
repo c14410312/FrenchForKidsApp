@@ -52,7 +52,7 @@ public class Tile extends GameObject implements MouseListener {
 		    parent.noFill();
 			parent.rect(x,y,w,w);
 		}
-		else if(type == 1){
+		if(type == 1){
 			parent.fill(color);
 			parent.rect(x, y, w, w);
 			parent.fill(255);
@@ -88,7 +88,7 @@ public class Tile extends GameObject implements MouseListener {
 		// TODO Auto-generated method stub
 		if(overTile(x,y,w)){
 			selected = !selected;
-			System.out.println("tile id: " + id);
+			System.out.println("tile id: " + id + "Type:" + type);
 		}
 		
 	}

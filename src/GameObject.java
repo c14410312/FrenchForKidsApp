@@ -1,13 +1,15 @@
-
+import processing.core.PApplet;
 
 abstract public class GameObject{
 
+	
+	public String id;
 	public GameObject(){
-     this(50, 50, 50);
+     this(null, 50, 50, null, 0, null);
     }
 	
-	public GameObject(float x, float y, float w){
-		
+	public GameObject(PApplet p, float x, float y, String id, int type, String cat){
+		this.id = id;
 	}
 	
 	abstract public void update();
