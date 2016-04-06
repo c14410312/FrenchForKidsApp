@@ -4,6 +4,7 @@ abstract public class GameObject{
 
 	
 	public String id;
+	
 	public GameObject(){
      this(null, 50, 50, null, 0, null);
     }

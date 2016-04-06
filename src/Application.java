@@ -26,9 +26,10 @@ public class Application extends PApplet {
 	String catName;
 	//used when looping through the selected category
 	int maxSize = 0;
-	int count = 0;
+	static int count = 0;
+	int selectedCount = 0;
 	boolean matchGame = false;
-	static int countSelected = 0;
+	public int countSelected = 0;
 
 	
 	ControlP5 nav;
@@ -255,11 +256,11 @@ public class Application extends PApplet {
 				{
 					
 					//need to change the parameter
-					loadCurrentCategory("Numbers");
+					loadCurrentCategory(catName);
 					//Pass the arraylist to the function
 					chooseRandomItems(CurCatItems);
 					//sets up the game
-					setUpMatchGame();
+					setUpMatchGame(catName);
 					
 					
 					//make Matchgame Start
@@ -275,9 +276,27 @@ public class Application extends PApplet {
 					go.render();
 					go.update();
 				}
-					
-			checkSelected();
+				
+				//function to constantly check which tiles are selected
+				checkSelected();
+			
+				if(selectedCount >= 2){
+					deSelectAll();
+				}
+			
 			}
+		}
+	}
+	
+	//used when user tries to click more than 2 tiles at once
+	public void deSelectAll(){
+		for(int i = 0 ; i < gameObjects.size(); i ++){
+			GameObject go = gameObjects.get(i);
+				if(go instanceof Tile){
+					if(((Tile) go).selected == true){
+						((Tile) go).selected = false;
+				    }
+			    }
 		}
 	}
 	
@@ -302,6 +321,10 @@ public class Application extends PApplet {
 					if(((Tile) go).selected == true){
 						 var1 = ((Tile) go).id;
 						 var1Pos = i;
+						 selectedCount = 1;
+					}
+					else{
+						selectedCount = 0;
 					}
 				}
 			}
@@ -310,11 +333,13 @@ public class Application extends PApplet {
 					if(((Tile) go).selected == true){
 						 var2 = ((Tile) go).id;
 						 var2Pos = i-1;
+						 selectedCount = 2;
 					}
 				}
 			}
 		}
 		
+		System.out.println(selectedCount);
 		//if the two selected items are equal then they are removed from the board
 		if(var1 == var2 && var1 != null && var2 != null ){
 			System.out.println("Well done");
@@ -424,7 +449,7 @@ public class Application extends PApplet {
 	 
 	 
 	 //sets up the matching game 
-	 public void setUpMatchGame(){
+	 public void setUpMatchGame(String cat){
 		 float y = 0;
 		 float x = 70;
 		 //k used to add category id's to tiles
@@ -450,7 +475,7 @@ public class Application extends PApplet {
 					if(type){
 						t = 1;
 					}
-					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Numbers");
+					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, cat);
 					gameObjects.add(tile);
 					x += 90;
 					type = !type;
