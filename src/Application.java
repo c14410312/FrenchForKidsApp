@@ -249,7 +249,7 @@ public class Application extends PApplet {
 				if(key == '1')
 				{
 					//need to change the parameter
-					loadCurrentCategory("Alphabet");
+					loadCurrentCategory("Numbers");
 					//Pass the arraylist to the function
 					chooseRandomItems(CurCatItems);
 					for(int i = 0; i < randomItems.size(); i ++)
@@ -272,7 +272,7 @@ public class Application extends PApplet {
 							if(!type){
 								t = 1;
 							}
-							Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Alphabet");
+							Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, "Numbers");
 							gameObjects.add(tile);
 							x += 90;
 							k++;

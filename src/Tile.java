@@ -10,6 +10,7 @@ public class Tile extends GameObject implements MouseListener {
 
 	float x, y, w;
 	int color = 0;
+	int tint = 0;
 	String id;
 	public boolean selected = false;
 	PApplet parent;
@@ -35,15 +36,18 @@ public class Tile extends GameObject implements MouseListener {
 		
 		if(selected){
 			color = 190;
+			tint = 40;
 		}
 		else{
 			color = 0;
+			tint = 255;
 		}
 		if(type == 0){
 			//gets the matching picture for value in x
 		    img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
 		    //gets the matching audio for value in x
 		    //parent.imageMode(PConstants.CENTER);
+		    parent.tint(255,tint);
 		    parent.image(img, x, y, w, w);
 		    parent.noFill();
 			parent.rect(x,y,w,w);
