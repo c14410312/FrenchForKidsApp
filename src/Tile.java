@@ -17,8 +17,9 @@ public class Tile extends GameObject implements MouseListener {
     int type;
     PImage img;
 	String cat;
+	String fr;
 	
-	Tile(PApplet p, float x, float y, String id, int type, String cat){
+	Tile(PApplet p, float x, float y, String id, int type, String cat, String fr){
 		parent = p;
 		this.x = x;
 		this.y = y;
@@ -26,6 +27,7 @@ public class Tile extends GameObject implements MouseListener {
 		this.id = id;
 		this.type = type;
 		this.cat = cat;
+		this.fr = fr;
 		parent.addMouseListener(this);
 	}
 	
@@ -58,7 +60,7 @@ public class Tile extends GameObject implements MouseListener {
 			parent.fill(255);
 			parent.textSize(12);
 			parent.textAlign(PConstants.CENTER);
-			parent.text(id,x+w/2,y+w/2);
+			parent.text(fr,x+w/2,y+w/2);
 		}
 	}
 

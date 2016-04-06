@@ -26,7 +26,7 @@ public class Application extends PApplet {
 	String catName;
 	//used when looping through the selected category
 	int maxSize = 0;
-	static int count = 0;
+    int count = 0;
 	int selectedCount = 0;
 	boolean matchGame = false;
 	public int countSelected = 0;
@@ -58,7 +58,7 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 4;
+	    screen = 0;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -203,6 +203,7 @@ public class Application extends PApplet {
 			nav.setVisible(false);
 			cat.setVisible(false);
 			mode.setVisible(false);
+			gamesCat.setVisible(false);
 		}
 		//mode
 		if(screen == 1){
@@ -214,6 +215,7 @@ public class Application extends PApplet {
 			start.setVisible(false);
 			nav.setVisible(false);
 			cat.setVisible(false);
+			gamesCat.setVisible(false);
 		}
 		//category
 		if(screen == 2){
@@ -224,6 +226,7 @@ public class Application extends PApplet {
 			//invisible buttons
 			nav.setVisible(false);
 			mode.setVisible(false);
+			gamesCat.setVisible(false);
 			
 		}
 		//words
@@ -236,6 +239,7 @@ public class Application extends PApplet {
 			}
 			//invisible buttons
 			cat.setVisible(false);
+			gamesCat.setVisible(false);
 			
 		}
 		//Matching picture word game
@@ -475,7 +479,7 @@ public class Application extends PApplet {
 					if(type){
 						t = 1;
 					}
-					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, cat);
+					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
 					gameObjects.add(tile);
 					x += 90;
 					type = !type;
