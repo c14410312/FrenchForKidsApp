@@ -20,6 +20,7 @@ public class Application extends PApplet {
 	int screen; 
 	int border = 50;
 	int selected = 0;
+	boolean click = false;
 	boolean buttonClicked = false;
 	//used to navigate through selected category
 	int i = 0;
@@ -29,6 +30,7 @@ public class Application extends PApplet {
     int count = 0;
 	int selectedCount = 0;
 	boolean matchGame = false;
+	boolean shootGame = false;
 	public int countSelected = 0;
 
 	
@@ -53,12 +55,22 @@ public class Application extends PApplet {
 	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
 	
 	ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+	boolean[] keys = new boolean[512];
 	
+	public void keyPressed()
+	{
+	  keys[keyCode] = true;
+	}
+
+	public void keyReleased()
+	{
+	  keys[keyCode] = false;
+	}
 	
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 0;
+	    screen = 5;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -290,6 +302,41 @@ public class Application extends PApplet {
 			
 			}
 		}
+		
+		//Correct picture shooting game 
+		if(screen == 5){
+			
+			nav.setVisible(false);
+			mode.setVisible(false);
+			cat.setVisible(false);
+			menu.setVisible(false);
+			start.setVisible(false);
+			gamesCat.setVisible(true);
+			
+			background(0);
+			// 1. Set up the game
+			if(buttonClicked && click == true){
+				PlayerGun pGun = new PlayerGun(this, 'A', 'D', ' ', width, height-border*2);
+				gameObjects.add(pGun);
+				System.out.println("Player created");
+				shootGame = true;
+				click = false;
+				
+			}
+			
+			//if Shooting game selected
+			if(shootGame){
+				for(int i = 0; i < gameObjects.size(); i++){
+					GameObject go = gameObjects.get(i);
+					if(go instanceof PlayerGun ){
+						go.render();
+						go.update();
+					}
+				}
+			}
+			
+			// 2. dynamically create objects
+		}
 	}
 	
 	//used when user tries to click more than 2 tiles at once
@@ -321,6 +368,7 @@ public class Application extends PApplet {
 		for(int i = 0 ; i < gameObjects.size(); i ++){
 			GameObject go = gameObjects.get(i);
 			if(var1 == null){
+				//Polymorphism
 				if(go instanceof Tile){
 					if(((Tile) go).selected == true){
 						 var1 = ((Tile) go).id;
@@ -560,8 +608,9 @@ public class Application extends PApplet {
 			//ensure to reinitialize i to ensure it ends up at the start of the list
 			i=0;
 			catName = "Numbers";
+			click = true;
 			buttonClicked = true;
-			screen = 4;
+			screen = 5;
 		}
 	}
 	

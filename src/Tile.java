@@ -8,6 +8,10 @@ import processing.core.*;
 
 public class Tile extends GameObject implements MouseListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	float x, y, w;
 	int color = 0;
 	int tint = 0;
@@ -52,6 +56,7 @@ public class Tile extends GameObject implements MouseListener {
 		    parent.tint(255,tint);
 		    parent.image(img, x, y, w, w);
 		    parent.noFill();
+		    parent.noStroke();
 			parent.rect(x,y,w,w);
 		}
 		if(type == 1){
