@@ -24,6 +24,7 @@ public class Application extends PApplet {
 	boolean buttonClicked = false;
 	//used to navigate through selected category
 	int i = 0;
+	int k = 0;
 	String catName;
 	//used when looping through the selected category
 	int maxSize = 0;
@@ -54,7 +55,7 @@ public class Application extends PApplet {
 	//String array to hold ten random items for match game
 	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
 	
-	ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+	static ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 	boolean[] keys = new boolean[512];
 	
 	public void keyPressed()
@@ -312,28 +313,48 @@ public class Application extends PApplet {
 			menu.setVisible(false);
 			start.setVisible(false);
 			gamesCat.setVisible(true);
+			//set type to 0 to create an image in tile class
+			int t = 0;
+			String cat = "Numbers";
 			
-			background(0);
+			background(255);
 			// 1. Set up the game
 			if(buttonClicked && click == true){
-				PlayerGun pGun = new PlayerGun(this, 'A', 'D', ' ', width, height-border*2);
-				gameObjects.add(pGun);
-				System.out.println("Player created");
+				
+				//need to change the parameter
+				loadCurrentCategory(catName);
+				//Pass the arraylist to the function load up random items from category
+				chooseRandomItems(CurCatItems);
 				shootGame = true;
 				click = false;
 				
 			}
 			
-			//if Shooting game selected
+			//if Picture Motion game selected
 			if(shootGame){
+				gamesCat.setVisible(false);
+				
 				for(int i = 0; i < gameObjects.size(); i++){
 					GameObject go = gameObjects.get(i);
-					if(go instanceof PlayerGun ){
+					if(go instanceof MotionTile){
 						go.render();
 						go.update();
 					}
+					
+				}
+				
+				if(frameCount % 60 == 0){
+					if(k < randomItems.size()){
+						float x =random(border, width-border);
+						float y = height - border;
+						MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
+						gameObjects.add(mTile);
+						System.out.println("Tile created");
+						k++;
+					}
 				}
 			}
+			
 			
 			// 2. dynamically create objects
 		}

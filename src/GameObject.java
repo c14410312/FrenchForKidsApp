@@ -8,7 +8,7 @@ abstract public class GameObject extends PApplet{
 	private static final long serialVersionUID = 1L;
 	public int health = 0;
 	public int score = 0;
-	public float speed = 4.0f;
+	public float speed = 8.0f;
 	int border = 50;
 	
 	boolean[] keys = new boolean[512];
