@@ -35,7 +35,7 @@ public class MotionTile extends GameObject {
 		y -= speed;
 		
 		
-		if ( y < 0 - border*2)
+		if (y > parent.height + border * 2)
 	    {
 	      Application.gameObjects.remove(this);
 	      System.out.println("Removing Tile");

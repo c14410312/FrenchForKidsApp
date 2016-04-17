@@ -346,7 +346,7 @@ public class Application extends PApplet {
 				if(frameCount % 60 == 0){
 					if(k < randomItems.size()){
 						float x =random(border, width-border);
-						float y = height - border;
+						float y = height ;
 						MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
 						gameObjects.add(mTile);
 						System.out.println("Tile created");
