@@ -385,6 +385,11 @@ public class Application extends PApplet {
 					
 					//launches the tiles into the screen
 					launchTiles(catName);
+					
+					textSize(30);
+					fill(0);
+					textAlign(CENTER,CENTER);
+					text(score + "/10", width-border, border);
 			
 				}
 				
@@ -523,6 +528,8 @@ public class Application extends PApplet {
 					//if the selected tile matches the current word then remove the word from the copied list and increment count
 					System.out.println(((MotionTile)go).id);
 					if(checkItem == ((MotionTile)go).id){
+						//increment the score
+						score += 1;
 						//give k value of ten in order to reinitialize 
 						track = minim.loadFile("Audio/"+catName+"/"+((MotionTile)go).id+".mp3");
 						track.rewind();
@@ -535,6 +542,9 @@ public class Application extends PApplet {
 						copyRandomItems.remove(rand);
 					}
 					else{
+						if(score > 0){
+							score -= 1;
+						}
 						track = minim.loadFile("Slap.mp3");
 						track.rewind();
 						track.play(); 
