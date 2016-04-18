@@ -41,7 +41,6 @@ public class MotionTile extends GameObject implements MouseListener {
 		if (y > parent.height + border * 2)
 	    {
 	      Application.gameObjects.remove(this);
-	      System.out.println("Removing Tile");
 	    }
 	}
 

@@ -20,8 +20,10 @@ public class Application extends PApplet {
 	int screen; 
 	int border = 50;
 	int selected = 0;
+	int rand = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
+	boolean newItem = true;
 	//used to navigate through selected category
 	int i = 0;
 	int k = 0;
@@ -208,6 +210,7 @@ public class Application extends PApplet {
 		background(255);
 		textFont(myFont);
 		textSize(32);
+		smooth();
 		count = 1;
 		
 		//menu
@@ -327,21 +330,23 @@ public class Application extends PApplet {
 				loadCurrentCategory(catName);
 				//Pass the arraylist to the function load up random items from category
 				chooseRandomItems(CurCatItems);
+				
 				//copies random items to another array list
-				copyRandomItems = randomItems;
+				for(CurrentCategory o : randomItems)
+					copyRandomItems.add(o);
+				
 				shootGame = true;
 				click = false;
 				
 			}
 			
 			//if Picture Motion game selected
-			if(shootGame && listCount < 10){
+			if(shootGame && copyRandomItems.size() > 0){
 				gamesCat.setVisible(false);
 				
 				//launches the tiles into the screen
 				launchTiles(catName);
-				
-				
+		
 			}
 			
 			//used to update the motionTiles during game play
@@ -427,11 +432,23 @@ public class Application extends PApplet {
 	public void launchTiles(String cat){
 		
 		int t = 0;
-		String checkItem = copyRandomItems.get(listCount).eng;
+		
+		
+		if (newItem){
+			
+			rand = (int) random(copyRandomItems.size());
+			newItem = false;
+			k = 0;
+		}
+		
+		String checkItem = copyRandomItems.get(rand).eng;
 		textSize(22);
 		fill(0);
-		text(checkItem, width/2, border*2);
+		text(copyRandomItems.get(rand).fr, width/2, border*2);
+		System.out.println(copyRandomItems.size());
+		System.out.println(randomItems.size());
 		
+		//create a new tile to launch every second
 		if(frameCount % 60 == 0){
 			if(k < randomItems.size()){
 				//used to check against selected tile
@@ -442,42 +459,37 @@ public class Application extends PApplet {
 				
 				MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
 				gameObjects.add(mTile);
-				System.out.println("Tile created");
 				k++;
 			}
 		}
+		
 		
 		for(int i = 0 ; i < gameObjects.size(); i ++){
 			GameObject go = gameObjects.get(i);
 			//Polymorphism
 			if(go instanceof MotionTile){
 				if(((MotionTile) go).selected == true){
-					
 					//if the selected tile matches the current word then remove the word from the copied list and increment count
-					if(checkItem == go.id){
-						copyRandomItems.remove(listCount);
+					System.out.println(((MotionTile)go).id);
+					if(checkItem == ((MotionTile)go).id){
 						//give k value of ten in order to reinitialize 
 						((MotionTile) go).selected = false;
-						k = 10;
-						System.out.println("new Word!!");
+						newItem = true;
+						copyRandomItems.remove(rand);
 					}
 					else{
 						((MotionTile) go).selected = false;
-						k=10;
+						newItem = true;
 					}
 				}
 			}
 		}
 		
-		//restarts the game and reinitializes the random list for next 
-		if (k == randomItems.size()){
-			//reinitialize k to 0
-			k=0;
-			//increment count in order to progress to next value
-			listCount ++;
-			//reOrganize the random items array
-			chooseRandomItems(CurCatItems);
+		//if no tiles are selected deduct points and create a newItem
+		if(k == randomItems.size()){
+			newItem = true;
 		}
+		
 	}
 	
 	public void modeSelection(){
