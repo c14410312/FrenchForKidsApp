@@ -29,6 +29,7 @@ public class Application extends PApplet {
 	//used when looping through the selected category
 	int maxSize = 0;
     int count = 0;
+    int listCount = 0;
 	int selectedCount = 0;
 	boolean matchGame = false;
 	boolean shootGame = false;
@@ -334,7 +335,7 @@ public class Application extends PApplet {
 			}
 			
 			//if Picture Motion game selected
-			if(shootGame){
+			if(shootGame && listCount < 10){
 				gamesCat.setVisible(false);
 				
 				//launches the tiles into the screen
@@ -422,19 +423,60 @@ public class Application extends PApplet {
 		
 	}
 	
+	//function to run the Launching Pictures game 
 	public void launchTiles(String cat){
 		
 		int t = 0;
+		String checkItem = copyRandomItems.get(listCount).eng;
+		textSize(22);
+		fill(0);
+		text(checkItem, width/2, border*2);
 		
 		if(frameCount % 60 == 0){
 			if(k < randomItems.size()){
+				//used to check against selected tile
+				
+				
 				float x =random(border, width-border);
 				float y = height ;
+				
 				MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
 				gameObjects.add(mTile);
 				System.out.println("Tile created");
 				k++;
 			}
+		}
+		
+		for(int i = 0 ; i < gameObjects.size(); i ++){
+			GameObject go = gameObjects.get(i);
+			//Polymorphism
+			if(go instanceof MotionTile){
+				if(((MotionTile) go).selected == true){
+					
+					//if the selected tile matches the current word then remove the word from the copied list and increment count
+					if(checkItem == go.id){
+						copyRandomItems.remove(listCount);
+						//give k value of ten in order to reinitialize 
+						((MotionTile) go).selected = false;
+						k = 10;
+						System.out.println("new Word!!");
+					}
+					else{
+						((MotionTile) go).selected = false;
+						k=10;
+					}
+				}
+			}
+		}
+		
+		//restarts the game and reinitializes the random list for next 
+		if (k == randomItems.size()){
+			//reinitialize k to 0
+			k=0;
+			//increment count in order to progress to next value
+			listCount ++;
+			//reOrganize the random items array
+			chooseRandomItems(CurCatItems);
 		}
 	}
 	

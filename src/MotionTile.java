@@ -77,7 +77,7 @@ public class MotionTile extends GameObject implements MouseListener {
 		// TODO Auto-generated method stub
 		if(overTile(x,y,w)){
 			selected = !selected;
-			System.out.println("tile id: " + id + "Type:" + type);
+			System.out.println("tile id: " + id);
 		}
 		
 	}
