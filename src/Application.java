@@ -21,6 +21,7 @@ public class Application extends PApplet {
 	int border = 50;
 	int selected = 0;
 	int rand = 0;
+	int timer = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
 	boolean newItem = true;
@@ -432,11 +433,13 @@ public class Application extends PApplet {
 	public void launchTiles(String cat){
 		
 		int t = 0;
-		
-		
+		minim = new Minim(this);
 		if (newItem){
 			
 			rand = (int) random(copyRandomItems.size());
+			track = minim.loadFile("Audio/"+catName+"/"+copyRandomItems.get(rand).eng+".mp3");
+			track.rewind();
+			track.play(); 
 			newItem = false;
 			k = 0;
 		}
@@ -445,11 +448,9 @@ public class Application extends PApplet {
 		textSize(22);
 		fill(0);
 		text(copyRandomItems.get(rand).fr, width/2, border*2);
-		System.out.println(copyRandomItems.size());
-		System.out.println(randomItems.size());
 		
 		//create a new tile to launch every second
-		if(frameCount % 60 == 0){
+		if(frameCount % 60 == 0 && timer > 2){
 			if(k < randomItems.size()){
 				//used to check against selected tile
 				
@@ -461,8 +462,13 @@ public class Application extends PApplet {
 				gameObjects.add(mTile);
 				k++;
 			}
+			
 		}
 		
+		//increment timer every second
+		if(frameCount % 60 == 0){
+			timer++;
+		}
 		
 		for(int i = 0 ; i < gameObjects.size(); i ++){
 			GameObject go = gameObjects.get(i);
@@ -474,11 +480,13 @@ public class Application extends PApplet {
 					if(checkItem == ((MotionTile)go).id){
 						//give k value of ten in order to reinitialize 
 						((MotionTile) go).selected = false;
+						timer = 0;
 						newItem = true;
 						copyRandomItems.remove(rand);
 					}
 					else{
 						((MotionTile) go).selected = false;
+						timer = 0;
 						newItem = true;
 					}
 				}
@@ -487,6 +495,7 @@ public class Application extends PApplet {
 		
 		//if no tiles are selected deduct points and create a newItem
 		if(k == randomItems.size()){
+			timer = 0;
 			newItem = true;
 		}
 		
