@@ -14,10 +14,10 @@ public class MotionTile extends GameObject implements MouseListener {
 	public boolean selected = false;
 	PApplet parent;
     int type;
-    PImage img;
 	String cat;
 	String fr;
 	float gravity = 0.08f;
+	PImage img;
 
 	MotionTile(PApplet p, float x, float y, String id, int type, String cat, String fr){
 		parent = p;
@@ -28,6 +28,7 @@ public class MotionTile extends GameObject implements MouseListener {
 		this.type = type;
 		this.cat = cat;
 		this.fr = fr;
+		img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
 		parent.addMouseListener(this);
 	}
 	@Override
@@ -48,7 +49,6 @@ public class MotionTile extends GameObject implements MouseListener {
 	public void render() {
 		// TODO Auto-generated method stub
 			//gets the matching picture for value in x
-		    img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
 		    //gets the matching audio for value in x
 		    //parent.imageMode(PConstants.CENTER);
 		    parent.image(img, x, y, w, w);

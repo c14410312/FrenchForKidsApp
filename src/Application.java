@@ -186,6 +186,11 @@ public class Application extends PApplet {
 		 .setPosition(150,250)
 		 .setSize(200,50)
 		 ;
+		cat.addButton("Fruits")
+		 .setValue(3)
+		 .setPosition(150,300)
+		 .setSize(200,50)
+		 ;
 		
 		//game choice buttons
 		games = new ControlP5(this);
@@ -204,6 +209,11 @@ public class Application extends PApplet {
 		gamesCat.addButton("Numbers1")
 	     .setValue(1)
 	     .setPosition(150,150)
+	     .setSize(200,50)
+	     ;
+		gamesCat.addButton("Fruits1")
+	     .setValue(1)
+	     .setPosition(150,200)
 	     .setSize(200,50)
 	     ;
 		
@@ -764,12 +774,32 @@ public class Application extends PApplet {
 			screen = 3;
 		}
 	}
+	public void Fruits(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
+			catName = "Fruits";
+			buttonClicked = true;
+			screen = 3;
+		}
+	}
 	
 	public void Numbers1(){
 		if(count > 0){
 			//ensure to reinitialize i to ensure it ends up at the start of the list
 			i=0;
 			catName = "Numbers";
+			click = true;
+			buttonClicked = true;
+			screen = 5;
+		}
+	}
+	
+	public void Fruits1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Fruits";
 			click = true;
 			buttonClicked = true;
 			screen = 5;

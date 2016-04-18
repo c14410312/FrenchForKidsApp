@@ -3,6 +3,8 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.*;
 
 
@@ -22,6 +24,8 @@ public class Tile extends GameObject implements MouseListener {
     PImage img;
 	String cat;
 	String fr;
+	AudioPlayer track;
+	Minim minim = new Minim(this);
 	
 	Tile(PApplet p, float x, float y, String id, int type, String cat, String fr){
 		parent = p;
@@ -63,7 +67,7 @@ public class Tile extends GameObject implements MouseListener {
 			parent.fill(color);
 			parent.rect(x, y, w, w);
 			parent.fill(255);
-			parent.textSize(12);
+			parent.textSize(8);
 			parent.textAlign(PConstants.CENTER);
 			parent.text(fr,x+w/2,y+w/2);
 		}
@@ -78,6 +82,7 @@ public class Tile extends GameObject implements MouseListener {
 	boolean overTile(float x, float y, float w){
 		if(parent.mouseX >= x && parent.mouseX <= x + w
 				&& parent.mouseY >= y && parent.mouseY <= y + w){
+			
 			return true;
 		}
 		else{
@@ -96,6 +101,9 @@ public class Tile extends GameObject implements MouseListener {
 		if(overTile(x,y,w)){
 			selected = !selected;
 			System.out.println("tile id: " + id + "Type:" + type);
+			track = minim.loadFile("Button.mp3");
+			track.rewind();
+			track.play();
 		}
 		
 	}
