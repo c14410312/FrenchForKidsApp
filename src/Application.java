@@ -445,9 +445,10 @@ public class Application extends PApplet {
 		}
 		
 		String checkItem = copyRandomItems.get(rand).eng;
-		textSize(22);
+		textSize(30);
 		fill(0);
-		text(copyRandomItems.get(rand).fr, width/2, border*2);
+		textAlign(CENTER,CENTER);
+		text(copyRandomItems.get(rand).fr, width/2, border);
 		
 		//create a new tile to launch every second
 		if(frameCount % 60 == 0 && timer > 2){
@@ -479,12 +480,17 @@ public class Application extends PApplet {
 					System.out.println(((MotionTile)go).id);
 					if(checkItem == ((MotionTile)go).id){
 						//give k value of ten in order to reinitialize 
+						track = minim.loadFile("Audio/"+catName+"/"+((MotionTile)go).id+".mp3");
+						track.rewind();
+						track.play(); 
+						delay(2000);
 						((MotionTile) go).selected = false;
 						timer = 0;
 						newItem = true;
 						copyRandomItems.remove(rand);
 					}
 					else{
+						delay(2000);
 						((MotionTile) go).selected = false;
 						timer = 0;
 						newItem = true;
@@ -495,6 +501,7 @@ public class Application extends PApplet {
 		
 		//if no tiles are selected deduct points and create a newItem
 		if(k == randomItems.size()){
+			delay(2000);
 			timer = 0;
 			newItem = true;
 		}
@@ -521,6 +528,10 @@ public class Application extends PApplet {
 	}
 	public void categories(){
 		
+	}
+	public void delay(int delay){
+		int time = millis();
+		while(millis() - time <= delay);
 	}
 	
 	/*Function to load in chosen category
