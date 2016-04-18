@@ -1,7 +1,10 @@
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class MotionTile extends GameObject {
+public class MotionTile extends GameObject implements MouseListener {
 	
 	private static final long serialVersionUID = 1L;
 	float x, y, w;
@@ -54,6 +57,29 @@ public class MotionTile extends GameObject {
 		    parent.noStroke();
 			parent.rect(x,y,w,w);
 
+	}
+	
+	//checks if the mouse is over the tile
+	boolean overTile(float x, float y, float w){
+		if(parent.mouseX >= x && parent.mouseX <= x + w
+				&& parent.mouseY >= y && parent.mouseY <= y + w){
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
+	
+	//when the mouse is clicked and the mouse is over the tile then the object is selected
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(overTile(x,y,w)){
+			selected = !selected;
+			System.out.println("tile id: " + id + "Type:" + type);
+		}
+		
 	}
 
 }

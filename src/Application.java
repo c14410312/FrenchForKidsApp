@@ -55,6 +55,9 @@ public class Application extends PApplet {
 	//String array to hold ten random items for match game
 	ArrayList<CurrentCategory> randomItems = new ArrayList<CurrentCategory>();
 	
+	//used in the moving card game
+	ArrayList<CurrentCategory> copyRandomItems = new ArrayList<CurrentCategory>();
+	
 	static ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 	boolean[] keys = new boolean[512];
 	
@@ -314,8 +317,6 @@ public class Application extends PApplet {
 			start.setVisible(false);
 			gamesCat.setVisible(true);
 			//set type to 0 to create an image in tile class
-			int t = 0;
-			String cat = "Numbers";
 			
 			background(255);
 			// 1. Set up the game
@@ -325,6 +326,8 @@ public class Application extends PApplet {
 				loadCurrentCategory(catName);
 				//Pass the arraylist to the function load up random items from category
 				chooseRandomItems(CurCatItems);
+				//copies random items to another array list
+				copyRandomItems = randomItems;
 				shootGame = true;
 				click = false;
 				
@@ -334,29 +337,22 @@ public class Application extends PApplet {
 			if(shootGame){
 				gamesCat.setVisible(false);
 				
-				for(int i = 0; i < gameObjects.size(); i++){
-					GameObject go = gameObjects.get(i);
-					if(go instanceof MotionTile){
-						go.render();
-						go.update();
-					}
-					
-				}
+				//launches the tiles into the screen
+				launchTiles(catName);
 				
-				if(frameCount % 60 == 0){
-					if(k < randomItems.size()){
-						float x =random(border, width-border);
-						float y = height ;
-						MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
-						gameObjects.add(mTile);
-						System.out.println("Tile created");
-						k++;
-					}
-				}
+				
 			}
 			
+			//used to update the motionTiles during game play
+			for(int i = 0; i < gameObjects.size(); i++){
+				GameObject go = gameObjects.get(i);
+				if(go instanceof MotionTile){
+					go.render();
+					go.update();
+				}
+				
+			}
 			
-			// 2. dynamically create objects
 		}
 	}
 	
@@ -424,6 +420,22 @@ public class Application extends PApplet {
 	public void startScreen(){
 		
 		
+	}
+	
+	public void launchTiles(String cat){
+		
+		int t = 0;
+		
+		if(frameCount % 60 == 0){
+			if(k < randomItems.size()){
+				float x =random(border, width-border);
+				float y = height ;
+				MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
+				gameObjects.add(mTile);
+				System.out.println("Tile created");
+				k++;
+			}
+		}
 	}
 	
 	public void modeSelection(){
