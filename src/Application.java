@@ -21,6 +21,7 @@ public class Application extends PApplet {
 	int border = 50;
 	int selected = 0;
 	int rand = 0;
+	int score = 0;
 	int timer = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
@@ -35,12 +36,17 @@ public class Application extends PApplet {
     int listCount = 0;
 	int selectedCount = 0;
 	boolean matchGame = false;
-	boolean shootGame = false;
+	boolean startMatchGame = false;
+	boolean setUpMatchGame = false;
+	boolean wordLaunchGame = false;
+	boolean startWordLaunchGame = false;
+	boolean setUpWordLaunchGame = false;
 	public int countSelected = 0;
 
 	
 	ControlP5 nav;
 	ControlP5 cat;
+	ControlP5 games;
 	ControlP5 gamesCat;
 	ControlP5 menu;
 	ControlP5 mode;
@@ -78,7 +84,7 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 5;
+	    screen = 2;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -181,6 +187,18 @@ public class Application extends PApplet {
 		 .setSize(200,50)
 		 ;
 		
+		//game choice buttons
+		games = new ControlP5(this);
+		games.addButton("MatchGame")
+		 .setValue(1)
+	     .setPosition(150,150)
+	     .setSize(200,50)
+		;
+		games.addButton("WordLaunch")
+		 .setValue(2)
+	     .setPosition(150,200)
+	     .setSize(200,50)
+		;
 		//Category Buttons (Games)
 		gamesCat = new ControlP5(this);
 		gamesCat.addButton("Numbers1")
@@ -225,6 +243,7 @@ public class Application extends PApplet {
 			cat.setVisible(false);
 			mode.setVisible(false);
 			gamesCat.setVisible(false);
+			games.setVisible(false);
 		}
 		//mode
 		if(screen == 1){
@@ -237,6 +256,7 @@ public class Application extends PApplet {
 			nav.setVisible(false);
 			cat.setVisible(false);
 			gamesCat.setVisible(false);
+			games.setVisible(false);
 		}
 		//category
 		if(screen == 2){
@@ -246,11 +266,14 @@ public class Application extends PApplet {
 			menu.setVisible(true);
 			//invisible buttons
 			nav.setVisible(false);
+			start.setVisible(false);
 			mode.setVisible(false);
 			gamesCat.setVisible(false);
+			games.setVisible(false);
 			
 		}
-		//words
+		
+		//words navigation
 		if(screen == 3){
 			//visible buttons
 			menu.setVisible(true);
@@ -261,25 +284,46 @@ public class Application extends PApplet {
 			//invisible buttons
 			cat.setVisible(false);
 			gamesCat.setVisible(false);
+			games.setVisible(false);
 			
 		}
 		//Matching picture word game
 		if(screen == 4){
+			//visible buttons
+			gamesCat.setVisible(true);
+			
+			//hidden buttons
 			nav.setVisible(false);
 			mode.setVisible(false);
 			cat.setVisible(false);
 			menu.setVisible(false);
 			start.setVisible(false);
-			gamesCat.setVisible(true);
+			games.setVisible(false);
 			
-			
-			
-			//only create one game when button clicked. add a function within the button so this occurs
 			//load the chosen category 
 			
-				if(buttonClicked)
+				
+		}
+		
+		//Correct picture shooting game 
+		if(screen == 5){
+			//visible buttons
+			games.setVisible(true);
+			
+			//hidden buttons
+			nav.setVisible(false);
+			mode.setVisible(false);
+			cat.setVisible(false);
+			menu.setVisible(false);
+			start.setVisible(false);
+			gamesCat.setVisible(false);
+			
+			//if matchGame is selected
+			if(matchGame){
+				games.setVisible(false);
+				
+				if(setUpMatchGame)
 				{
-					
 					//need to change the parameter
 					loadCurrentCategory(catName);
 					//Pass the arraylist to the function
@@ -289,76 +333,73 @@ public class Application extends PApplet {
 					
 					
 					//make Matchgame Start
-					matchGame = !matchGame;
+					startMatchGame = true;
+					setUpMatchGame = false;
 					buttonClicked = false;
 				}
 			
-			if(matchGame){
+				if(startMatchGame){
 				
-				gamesCat.setVisible(false);
+					gamesCat.setVisible(false);
+					for(int i = 0; i < gameObjects.size(); i++){
+						GameObject go = gameObjects.get(i);
+						go.render();
+						go.update();
+					}
+					
+					//function to constantly check which tiles are selected
+					checkSelected();
+				
+					if(selectedCount >= 2){
+						deSelectAll();
+					}
+			
+				}
+			}
+			
+			
+			//Starts wordLaunch if its selected
+			if(wordLaunchGame){
+				games.setVisible(false);
+				// 1. Set up the game
+				if(setUpWordLaunchGame == true){
+					
+					//need to change the parameter
+					loadCurrentCategory(catName);
+					//Pass the arraylist to the function load up random items from category
+					chooseRandomItems(CurCatItems);
+					
+					//copies random items to another array list
+					for(CurrentCategory o : randomItems)
+						copyRandomItems.add(o);
+					
+					startWordLaunchGame = true;
+					setUpWordLaunchGame = false;
+					click = false;
+					
+				}//end setuplaunchGame
+				
+				//if Picture Motion game selected
+				if(startWordLaunchGame && copyRandomItems.size() > 0){
+					gamesCat.setVisible(false);
+					
+					//launches the tiles into the screen
+					launchTiles(catName);
+			
+				}
+				
+				//used to update the motionTiles during game play
 				for(int i = 0; i < gameObjects.size(); i++){
 					GameObject go = gameObjects.get(i);
-					go.render();
-					go.update();
+					if(go instanceof MotionTile){
+						go.render();
+						go.update();
+					}
+					
 				}
-				
-				//function to constantly check which tiles are selected
-				checkSelected();
+			}//end if launch game
 			
-				if(selectedCount >= 2){
-					deSelectAll();
-				}
 			
-			}
-		}
-		
-		//Correct picture shooting game 
-		if(screen == 5){
-			
-			nav.setVisible(false);
-			mode.setVisible(false);
-			cat.setVisible(false);
-			menu.setVisible(false);
-			start.setVisible(false);
-			gamesCat.setVisible(true);
-			//set type to 0 to create an image in tile class
-			
-			background(255);
-			// 1. Set up the game
-			if(buttonClicked && click == true){
-				
-				//need to change the parameter
-				loadCurrentCategory(catName);
-				//Pass the arraylist to the function load up random items from category
-				chooseRandomItems(CurCatItems);
-				
-				//copies random items to another array list
-				for(CurrentCategory o : randomItems)
-					copyRandomItems.add(o);
-				
-				shootGame = true;
-				click = false;
-				
-			}
-			
-			//if Picture Motion game selected
-			if(shootGame && copyRandomItems.size() > 0){
-				gamesCat.setVisible(false);
-				
-				//launches the tiles into the screen
-				launchTiles(catName);
-		
-			}
-			
-			//used to update the motionTiles during game play
-			for(int i = 0; i < gameObjects.size(); i++){
-				GameObject go = gameObjects.get(i);
-				if(go instanceof MotionTile){
-					go.render();
-					go.update();
-				}
-				
-			}
 			
 		}
 	}
@@ -456,7 +497,7 @@ public class Application extends PApplet {
 				//used to check against selected tile
 				
 				
-				float x =random(border, width-border);
+				float x =random(border, width-border*2);
 				float y = height ;
 				
 				MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
@@ -490,6 +531,7 @@ public class Application extends PApplet {
 						((MotionTile) go).selected = false;
 						timer = 0;
 						newItem = true;
+						//remove this element from the list so it doesn't re occur
 						copyRandomItems.remove(rand);
 					}
 					else{
@@ -559,7 +601,6 @@ public class Application extends PApplet {
 		    		CurrentCategory curCatItem = new CurrentCategory(lines[i]);
 		        	CurCatItems.add(curCatItem);
 		        	maxSize = i;
-		        	System.out.println("loading new" + cat);
 	    		}
 	    		//System.out.println(CurCatItems.size());
 	    	}
@@ -569,9 +610,7 @@ public class Application extends PApplet {
 	    			CurrentCategory curCatItem = new CurrentCategory(lines[i]);
 		    		CurCatItems.set(i,curCatItem);
 		    		maxSize = i;
-		    		System.out.println("replacing with" + cat);
 	    		}
-	    		System.out.println(CurCatItems.size());
 	    		
 	    	}
 		        
@@ -725,6 +764,24 @@ public class Application extends PApplet {
 			buttonClicked = true;
 			screen = 5;
 		}
+	}
+	
+	public void WordLaunch(){
+		if(count > 0){
+			click = true;
+			wordLaunchGame = true;
+			setUpWordLaunchGame = true;
+		}
+		
+	}
+	
+	public void MatchGame(){
+		if(count > 0){
+			click = true;
+			matchGame = true;
+			setUpMatchGame = true;
+		}
+		
 	}
 	
 	public void Back(){
