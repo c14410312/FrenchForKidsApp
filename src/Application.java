@@ -461,6 +461,9 @@ public class Application extends PApplet {
 				
 				MotionTile mTile = new MotionTile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
 				gameObjects.add(mTile);
+				track = minim.loadFile("Bow.mp3");
+				track.rewind();
+				track.play(); 
 				k++;
 			}
 			
@@ -490,6 +493,9 @@ public class Application extends PApplet {
 						copyRandomItems.remove(rand);
 					}
 					else{
+						track = minim.loadFile("Slap.mp3");
+						track.rewind();
+						track.play(); 
 						delay(2000);
 						((MotionTile) go).selected = false;
 						timer = 0;
@@ -500,8 +506,8 @@ public class Application extends PApplet {
 		}
 		
 		//if no tiles are selected deduct points and create a newItem
-		if(k == randomItems.size()){
-			delay(2000);
+		if(timer == 15){
+			//delay(2000);
 			timer = 0;
 			newItem = true;
 		}
