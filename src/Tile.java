@@ -46,7 +46,7 @@ public class Tile extends GameObject implements MouseListener {
 		
 		if(selected){
 			color = 190;
-			tint = 40;
+			tint = 80;
 		}
 		else{
 			color = 0;
@@ -58,6 +58,7 @@ public class Tile extends GameObject implements MouseListener {
 		    //gets the matching audio for value in x
 		    //parent.imageMode(PConstants.CENTER);
 		    parent.tint(255,tint);
+		    parent.imageMode(0);
 		    parent.image(img, x, y, w, w);
 		    parent.noFill();
 		    parent.noStroke();

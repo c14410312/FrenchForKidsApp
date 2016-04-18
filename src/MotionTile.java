@@ -23,7 +23,7 @@ public class MotionTile extends GameObject implements MouseListener {
 		parent = p;
 		this.x = x;
 		this.y = y;
-		this.w = 100;
+		this.w = 120;
 		this.id = id;
 		this.type = type;
 		this.cat = cat;

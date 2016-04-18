@@ -216,6 +216,11 @@ public class Application extends PApplet {
 	     .setPosition(150,200)
 	     .setSize(200,50)
 	     ;
+		gamesCat.addButton("Family1")
+	     .setValue(1)
+	     .setPosition(150,250)
+	     .setSize(200,50)
+	     ;
 		
 	    //Navigation for Category words screen 
 	    nav = new ControlP5(this);
@@ -471,10 +476,13 @@ public class Application extends PApplet {
 			}
 		}
 		
-		System.out.println(selectedCount);
 		//if the two selected items are equal then they are removed from the board
 		if(var1 == var2 && var1 != null && var2 != null ){
-			System.out.println("Well done");
+			System.out.println(var1);
+			minim = new Minim(this);
+			track = minim.loadFile("Audio/"+catName+"/"+var1+".mp3");
+			track.rewind();
+			track.play();
 			gameObjects.remove(var1Pos);
 			gameObjects.remove(var2Pos);
 		}
@@ -800,6 +808,17 @@ public class Application extends PApplet {
 			//ensure to reinitialize i to ensure it ends up at the start of the list
 			i=0;
 			catName = "Fruits";
+			click = true;
+			buttonClicked = true;
+			screen = 5;
+		}
+	}
+	
+	public void Family1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Family";
 			click = true;
 			buttonClicked = true;
 			screen = 5;
