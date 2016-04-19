@@ -7,6 +7,7 @@ public class Target extends GameObject {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	float targetSpeed;
 	float x, y, w;
 	static PApplet parent;
 	boolean left = false;
@@ -18,6 +19,7 @@ public class Target extends GameObject {
 		super(parent,x, y, w); 
 		Target.parent = p;
 		this.w = w;
+		this.targetSpeed =  parent.random(speed/2,speed);
 		
 	}
 	@Override
@@ -25,16 +27,21 @@ public class Target extends GameObject {
 		// TODO Auto-generated method stub
 		
 		if(left){
-			pos.x += speed/1.5;
+			pos.x += targetSpeed;
 		}
 		else{
-			pos.x -= speed/1.5;
+			pos.x -= targetSpeed;
 		}
 		if(pos.x < 0){
+			
+			
 			left = !left;
+			
 		}
 		else if(pos.x > parent.width){
+
 			left = !left;
+			
 		}
 		
 		

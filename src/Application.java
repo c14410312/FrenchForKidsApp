@@ -20,23 +20,29 @@ public class Application extends PApplet {
 	int screen; 
 	int border = 50;
 	int selected = 0;
+	int ssIndex = 0;
 	int rand = 0;
 	int score = 0;
 	int timer = 0;
+	int loc = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
+	boolean hitTarget = false;
 	boolean createTarget = true;
 	static boolean createBall = true;
 	boolean newItem = true;
+	boolean chooseWord = true;
 	//used to navigate through selected category
 	int i = 0;
 	int k = 0;
 	String catName;
+	String word;
 	//used when looping through the selected category
 	int maxSize = 0;
     int count = 0;
     int listCount = 0;
 	int selectedCount = 0;
+	boolean shootAndStrike = true;
 	boolean matchGame = false;
 	boolean startMatchGame = false;
 	boolean setUpMatchGame = false;
@@ -437,9 +443,30 @@ public class Application extends PApplet {
 			gamesCat.setVisible(false);
 			games.setVisible(false);
 			
+			if(shootAndStrike){
+				
+				//need to change the parameter
+				loadCurrentCategory("Fruits");
+				//Pass the arraylist to the function load up random items from category
+				chooseRandomItems(CurCatItems);
+				
+				//copies random items to another array list
+				for(CurrentCategory o : randomItems){
+					copyRandomItems.add(o);
+				}
+				//leave 5 elements in copyRandomItems and delete the rest
+				for(int i = 0; i < randomItems.size()-5;i++){
+					copyRandomItems.remove(i);
+				}
+				
+				shootAndStrike = false;
+			}
+			
 			if(createTarget){
-			 Target target = new Target(this,width/4,height/4,20);
-			 gameObjects.add(target);
+				for(int i = 0 ; i < 5;i++){
+					 Target target = new Target(this,(border + random(400)),(border + (border  * i)),15);
+					 gameObjects.add(target);
+				}
 			 createTarget = false;
 			}
 			
@@ -450,22 +477,71 @@ public class Application extends PApplet {
 				 createBall = false;
 			}
 			
+			if(hitTarget){
+				fill(0);
+				rect(0,height/4, width,width/2);
+				if(chooseWord){
+					loc = (int) random(copyRandomItems.size());
+					//use word to locate image and audio files
+					word = copyRandomItems.get(loc).eng;
+					
+					for(int i = 0 ; i < 3; i++){
+						//if i doesnt already match the current location of the choosen word
+						if(i != loc){
+							Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, "Fruits", copyRandomItems.get(i).fr);
+							gameObjects.add(tile);
+						}
+						//if i does match the location of the chosen word
+						else{
+							Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, "Fruits", copyRandomItems.get(i).fr);
+							gameObjects.add(tile);
+						}
+						
+					}
+					chooseWord = false;
+					//choosen random number between 0,1,2 in order to give the correct picture a random location each time 
+				}
+				
+				textSize(30);
+				fill(255);
+				textAlign(CENTER,CENTER);
+				text(copyRandomItems.get(loc).fr,width/2,height/3);
+				System.out.println(word);
+				
+				
+				for(int i = 0; i < gameObjects.size(); i++){
+					GameObject go = gameObjects.get(i);
+					if(go instanceof Tile){
+						((Tile)go).update();
+						((Tile)go).render();
+					}
+				}
+				//need to load up randomitems array and choose one image and text.
+				
+			}
+			
 			for(int i = 0; i < gameObjects.size(); i++){
 				GameObject go = gameObjects.get(i);
 				if(go instanceof Ball){
 					((Ball)go).aim();
 				}
-				go.update();
-				go.render();
+				if(!hitTarget){
+					go.update();
+					go.render();
+				}
+				
 				
 			}
 			checkBallCollisions();
 			
 		}
 		
+	
+		
 		
 	}
 	
+	//checks ball and target collisions
 	void checkBallCollisions()
 	{
 	 for(int i = gameObjects.size() - 1 ; i >= 0   ;i --)
@@ -485,6 +561,7 @@ public class Application extends PApplet {
 	        	  System.out.println(other.pos);
 	              gameObjects.remove(other);
 	              System.out.println("Target removed");
+	              hitTarget = true;
 	          }
 	        }
 	      }
