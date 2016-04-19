@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PVector;
 
 abstract public class GameObject extends PApplet{
 
@@ -9,7 +10,9 @@ abstract public class GameObject extends PApplet{
 	public int health = 0;
 	public int score = 0;
 	public float speed = 8.0f;
+	public float halfW;
 	int border = 50;
+	PVector pos;
 	
 	boolean[] keys = new boolean[512];
 	
@@ -18,11 +21,12 @@ abstract public class GameObject extends PApplet{
 	public String id;
 	
 	public GameObject(){
-     this(null, 50, 50, null, 0, null);
+     this(null, 50, 50, 50);
     }
 	
-	public GameObject(PApplet p, float x, float y, String id, int type, String cat){
-		this.id = id;
+	public GameObject(PApplet p, float x, float y,float w){
+		pos = new PVector(x, y);
+		this.halfW = w * 0.5f;
 	}
 	
 	abstract public void update();

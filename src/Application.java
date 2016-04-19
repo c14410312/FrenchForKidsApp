@@ -26,6 +26,7 @@ public class Application extends PApplet {
 	boolean click = false;
 	boolean buttonClicked = false;
 	boolean createTarget = true;
+	static boolean createBall = true;
 	boolean newItem = true;
 	//used to navigate through selected category
 	int i = 0;
@@ -439,11 +440,14 @@ public class Application extends PApplet {
 			if(createTarget){
 			 Target target = new Target(this,width/4,height/4,20);
 			 gameObjects.add(target);
-			 
-			//creates a new instance of ball
-			 Ball ball = new Ball(this,width/2,height-(border*2),25);
-			 gameObjects.add(ball);
 			 createTarget = false;
+			}
+			
+			if(createBall){
+				//creates a new instance of ball
+				 Ball ball = new Ball(this,width/2,height-(border*2),25);
+				 gameObjects.add(ball);
+				 createBall = false;
 			}
 			
 			for(int i = 0; i < gameObjects.size(); i++){
@@ -455,10 +459,37 @@ public class Application extends PApplet {
 				go.render();
 				
 			}
+			checkBallCollisions();
 			
 		}
 		
 		
+	}
+	
+	void checkBallCollisions()
+	{
+	 for(int i = gameObjects.size() - 1 ; i >= 0   ;i --)
+	 {
+	    GameObject go = gameObjects.get(i);
+	    if (go instanceof Ball)
+	    {
+	      for(int j = gameObjects.size() - 1 ; j >= 0   ;j --)
+	      {
+	        GameObject other = gameObjects.get(j);
+	        if (other instanceof Target) // Check the type of a object
+	        {
+	          // Bounding circle collisions
+	          if (go.pos.dist(other.pos) < ((Ball)go).halfW + ((Target)other).halfW)
+	          {
+	        	  System.out.println(go.pos);
+	        	  System.out.println(other.pos);
+	              gameObjects.remove(other);
+	              System.out.println("Target removed");
+	          }
+	        }
+	      }
+	    }
+	 } 
 	}
 	
 	//used when user tries to click more than 2 tiles at once

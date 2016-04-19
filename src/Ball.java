@@ -21,44 +21,51 @@ public class Ball extends GameObject implements MouseListener  {
 	float arcStart = -PI/2;
 	float arcEnd = PI/2;
 	boolean isPressed = false;
-	PApplet parent;
+	static PApplet parent;
+	
+	Ball(){
+		super(parent,250 * 0.5f, 500 * 0.1f, 50);
+	}
 	
 	Ball(PApplet p,float x, float y, float w){
-		this.parent = p;
-		this.x = x;
-		this.y = y;
+		super(parent,x, y, 50); 
+		Ball.parent = p;
 		this.ballWidth = w;
 		parent.addMouseListener(this);
 	}
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		x = x + deltaX;
-		y = y + deltaY;
-		System.out.println("Updating");
+		pos.x = pos.x + deltaX;
+		pos.y = pos.y + deltaY;
 		
-		if (x > parent.width-ballWidth/2 || x < ballWidth/2)
+		if (pos.x > parent.width-ballWidth/2 || pos.x < ballWidth/2)
 		  {
 		    deltaX = -deltaX;
 		    deltaX = (float) (deltaX * 0.6);
-		    if (x < ballWidth/2)
+		    if (pos.x < ballWidth/2)
 		    {
-		    x = ballWidth/2;
+		    pos.x = ballWidth/2;
 		  }
 		    else
-		    {x = parent.width-ballWidth/2;
+		    {pos.x = parent.width-ballWidth/2;
 		  }
 		  }
-		  if (y > parent.width-ballWidth/2 || y < ballWidth/2)
+		  if (pos.y > parent.width-ballWidth/2)
 		  {
 		    deltaY = -deltaY;
 		    deltaY = (float) (deltaY * 0.6);
-		    if (y < ballWidth/2)
-		    {y = ballWidth/2;
+		    if (pos.y < ballWidth/2)
+		    {pos.y = ballWidth/2;
 		  }
 		    else
-		    {y = parent.width-ballWidth/2;
+		    {pos.y = parent.width-ballWidth/2;
 		  }
+		  }
+		  if(pos.y < ballWidth/2){
+			  Application.gameObjects.remove(this);
+			  System.out.println("Ball removed");
+			  Application.createBall = true;
 		  }
 	}
 
@@ -69,10 +76,10 @@ public class Ball extends GameObject implements MouseListener  {
 		  
 		  parent.fill(0);
 		  parent.stroke(0);
-		  parent.ellipse (x, y, ballWidth, ballWidth);
+		  parent.ellipse (pos.x, pos.y, ballWidth, ballWidth);
 		  parent.stroke (0);
 		  parent.noFill();
-		  parent.translate(x,y);
+		  parent.translate(pos.x,pos.y);
 		  if (deltaY < 0 && deltaX > 0)
 		  {parent.rotate(PI/2 - tan(deltaY/deltaX));
 		  }
@@ -91,7 +98,7 @@ public class Ball extends GameObject implements MouseListener  {
 	void aim(){
 		if(parent.mousePressed == true){
 			parent.stroke(0);
-			parent.line(x, y, parent.mouseX, parent.mouseY);
+			parent.line(pos.x, pos.y, parent.mouseX, parent.mouseY);
 		}
 	}
 	
@@ -103,8 +110,8 @@ public class Ball extends GameObject implements MouseListener  {
 	public void mouseReleased(){
 	
 		System.out.println("Mouse released");
-	  deltaX = (x - parent.mouseX)/33;
-	  deltaY = (y - parent.mouseY)/33;
+	  deltaX = (pos.x - parent.mouseX)/33;
+	  deltaY = (pos.y - parent.mouseY)/33;
 	  System.out.println(deltaX);
 	}
 	

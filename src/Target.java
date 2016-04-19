@@ -8,29 +8,32 @@ public class Target extends GameObject {
 	private static final long serialVersionUID = 1L;
 	
 	float x, y, w;
-	PApplet parent;
+	static PApplet parent;
 	boolean left = false;
+	Target(){
+		super(parent,500/4, 500/4, 50);
+	}
 	
 	Target(PApplet p, float x, float y, float w){
-		this.parent = p;
-		this.x = x;
-		this.y= y;
+		super(parent,x, y, w); 
+		Target.parent = p;
 		this.w = w;
+		
 	}
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
 		
 		if(left){
-			x += speed/1.5;
+			pos.x += speed/1.5;
 		}
 		else{
-			x -= speed/1.5;
+			pos.x -= speed/1.5;
 		}
-		if(x < 0){
+		if(pos.x < 0){
 			left = !left;
 		}
-		else if(x > parent.width){
+		else if(pos.x > parent.width){
 			left = !left;
 		}
 		
@@ -41,11 +44,11 @@ public class Target extends GameObject {
 	public void render() {
 		// TODO Auto-generated method stub
 		parent.fill(255,255,0);
-		parent.ellipse(x,y,w*3,w*3);
+		parent.ellipse(pos.x,pos.y,w*3,w*3);
 		parent.fill(0,0,255);
-		parent.ellipse(x,y,w*2,w*2);
+		parent.ellipse(pos.x,pos.y,w*2,w*2);
 		parent.fill(255,0,0);
-		parent.ellipse(x,y,w,w);
+		parent.ellipse(pos.x,pos.y,w,w);
 	}
 
 }
