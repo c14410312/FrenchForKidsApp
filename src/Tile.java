@@ -36,6 +36,7 @@ public class Tile extends GameObject implements MouseListener {
 		this.type = type;
 		this.cat = cat;
 		this.fr = fr;
+		this.img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
 		parent.addMouseListener(this);
 	}
 	
@@ -53,8 +54,6 @@ public class Tile extends GameObject implements MouseListener {
 			tint = 255;
 		}
 		if(type == 0){
-			//gets the matching picture for value in x
-		    img = parent.loadImage("Images/"+cat+"/"+id+".jpg");
 		    //gets the matching audio for value in x
 		    //parent.imageMode(PConstants.CENTER);
 		    parent.tint(255,tint);
@@ -77,6 +76,10 @@ public class Tile extends GameObject implements MouseListener {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+		if(Application.hitTarget == false && Application.shootAndStrike == true){
+			Application.gameObjects.remove(this);
+			selected = !selected;
+		}
 	}
 	
 	//function to check if mouse is over tile
@@ -91,6 +94,9 @@ public class Tile extends GameObject implements MouseListener {
 		}
 
 	}
+	void delete(){
+		Application.gameObjects.remove(this);
+	}
 	
 	public void mousePressed(){
 		System.out.println("Hello");
@@ -102,9 +108,11 @@ public class Tile extends GameObject implements MouseListener {
 		if(overTile(x,y,w)){
 			selected = !selected;
 			System.out.println("tile id: " + id + "Type:" + type);
-			track = minim.loadFile("Button.mp3");
-			track.rewind();
-			track.play();
+			if(Application.matchGame == true){
+				track = minim.loadFile("Button.mp3");
+				track.rewind();
+				track.play();
+			}
 		}
 		
 	}

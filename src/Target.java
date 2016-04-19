@@ -9,15 +9,15 @@ public class Target extends GameObject {
 	
 	float targetSpeed;
 	float x, y, w;
-	static PApplet parent;
+	PApplet parent;
 	boolean left = false;
 	Target(){
-		super(parent,500/4, 500/4, 50);
+		super(500/4, 500/4, 50);
 	}
 	
 	Target(PApplet p, float x, float y, float w){
-		super(parent,x, y, w); 
-		Target.parent = p;
+		super(x, y, w); 
+		parent = p;
 		this.w = w;
 		this.targetSpeed =  parent.random(speed/2,speed);
 		

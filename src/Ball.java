@@ -21,21 +21,25 @@ public class Ball extends GameObject implements MouseListener  {
 	float arcStart = -PI/2;
 	float arcEnd = PI/2;
 	boolean isPressed = false;
-	static PApplet parent;
+	PApplet parent;
 	
 	Ball(){
-		super(parent,250 * 0.5f, 500 * 0.1f, 50);
+		super(250 * 0.5f, 500 * 0.1f, 50);
 	}
 	
 	Ball(PApplet p,float x, float y, float w){
-		super(parent,x, y, 50); 
-		Ball.parent = p;
+		super(x, y, 50); 
+		parent = p;
 		this.ballWidth = w;
 		parent.addMouseListener(this);
 	}
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+		if(Application.hitTarget == true){
+			Application.gameObjects.remove(this);
+		}
+		
 		pos.x = pos.x + deltaX;
 		pos.y = pos.y + deltaY;
 		
@@ -67,19 +71,20 @@ public class Ball extends GameObject implements MouseListener  {
 			  System.out.println("Ball removed");
 			  Application.createBall = true;
 		  }
+		  
 	}
 
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 			
-		  
+		  parent.pushMatrix(); // reset the translation and rotation
+	      parent.translate(pos.x, pos.y);
 		  parent.fill(0);
 		  parent.stroke(0);
-		  parent.ellipse (pos.x, pos.y, ballWidth, ballWidth);
+		  parent.ellipse (0, 0, ballWidth, ballWidth);
 		  parent.stroke (0);
 		  parent.noFill();
-		  parent.translate(pos.x,pos.y);
 		  if (deltaY < 0 && deltaX > 0)
 		  {parent.rotate(PI/2 - tan(deltaY/deltaX));
 		  }
@@ -92,7 +97,7 @@ public class Ball extends GameObject implements MouseListener  {
 		  if (deltaY > 0 && deltaX < 0)
 		  {parent.rotate(-PI + tan(deltaY/deltaX));
 		  }
-
+		  parent.popMatrix();
 	}
 
 	void aim(){
@@ -100,6 +105,10 @@ public class Ball extends GameObject implements MouseListener  {
 			parent.stroke(0);
 			parent.line(pos.x, pos.y, parent.mouseX, parent.mouseY);
 		}
+	}
+	
+	void delete(){
+		Application.gameObjects.remove(this);
 	}
 	
 	

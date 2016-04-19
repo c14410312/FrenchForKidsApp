@@ -27,7 +27,7 @@ public class Application extends PApplet {
 	int loc = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
-	boolean hitTarget = false;
+	static boolean hitTarget = false;
 	boolean createTarget = true;
 	static boolean createBall = true;
 	boolean newItem = true;
@@ -42,14 +42,18 @@ public class Application extends PApplet {
     int count = 0;
     int listCount = 0;
 	int selectedCount = 0;
-	boolean shootAndStrike = true;
-	boolean matchGame = false;
+	static boolean matchGame = false;
 	boolean startMatchGame = false;
 	boolean setUpMatchGame = false;
 	boolean wordLaunchGame = false;
 	boolean startWordLaunchGame = false;
 	boolean setUpWordLaunchGame = false;
+	static boolean shootAndStrike = false;
+	boolean startShootAndStrike = false;
+	boolean setUpShootAndStrike = false;
 	public int countSelected = 0;
+	int butX = 10; 
+	int butY = 10;
 
 	
 	ControlP5 nav;
@@ -59,6 +63,7 @@ public class Application extends PApplet {
 	ControlP5 menu;
 	ControlP5 mode;
 	ControlP5 start;
+	ControlP5 gameNav;
 	ControlP5 replaySound;
 	PImage img;
 	Minim minim;
@@ -94,7 +99,7 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 6;
+	    screen = 0;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	 
@@ -178,6 +183,13 @@ public class Application extends PApplet {
 		         }
 		       })
 	     ;
+	    
+	    gameNav = new ControlP5(this);
+	    gameNav.addButton("Back1")
+	     .setValue(1)
+	     .setPosition(butX,butY)
+	     .setSize(50,50)
+	     ;
 	    		 
 	    //Category Buttons (words)
 	    cat = new ControlP5(this);
@@ -212,6 +224,11 @@ public class Application extends PApplet {
 		games.addButton("WordLaunch")
 		 .setValue(2)
 	     .setPosition(150,200)
+	     .setSize(200,50)
+		;
+		games.addButton("ShootAndStrike")
+		 .setValue(2)
+	     .setPosition(150,250)
 	     .setSize(200,50)
 		;
 		//Category Buttons (Games)
@@ -269,6 +286,7 @@ public class Application extends PApplet {
 			mode.setVisible(false);
 			gamesCat.setVisible(false);
 			games.setVisible(false);
+			gameNav.setVisible(false);
 		}
 		//mode
 		if(screen == 1){
@@ -282,6 +300,7 @@ public class Application extends PApplet {
 			cat.setVisible(false);
 			gamesCat.setVisible(false);
 			games.setVisible(false);
+			gameNav.setVisible(false);
 		}
 		//category
 		if(screen == 2){
@@ -295,6 +314,7 @@ public class Application extends PApplet {
 			mode.setVisible(false);
 			gamesCat.setVisible(false);
 			games.setVisible(false);
+			gameNav.setVisible(false);
 			
 		}
 		
@@ -310,6 +330,7 @@ public class Application extends PApplet {
 			cat.setVisible(false);
 			gamesCat.setVisible(false);
 			games.setVisible(false);
+			gameNav.setVisible(false);
 			
 		}
 		//Matching picture word game
@@ -324,6 +345,7 @@ public class Application extends PApplet {
 			menu.setVisible(false);
 			start.setVisible(false);
 			games.setVisible(false);
+			gameNav.setVisible(false);
 			
 			//load the chosen category 
 			
@@ -335,6 +357,7 @@ public class Application extends PApplet {
 			//visible buttons
 			games.setVisible(true);
 			
+			
 			//hidden buttons
 			nav.setVisible(false);
 			mode.setVisible(false);
@@ -343,12 +366,15 @@ public class Application extends PApplet {
 			start.setVisible(false);
 			gamesCat.setVisible(false);
 			
+			
 			//if matchGame is selected
 			if(matchGame){
 				games.setVisible(false);
+				gameNav.setVisible(true);
 				
 				if(setUpMatchGame)
 				{
+					
 					//need to change the parameter
 					loadCurrentCategory(catName);
 					//Pass the arraylist to the function
@@ -385,6 +411,7 @@ public class Application extends PApplet {
 			
 			//Starts wordLaunch if its selected
 			if(wordLaunchGame){
+				gameNav.setVisible(true);
 				games.setVisible(false);
 				// 1. Set up the game
 				if(setUpWordLaunchGame == true){
@@ -429,116 +456,151 @@ public class Application extends PApplet {
 				}
 			}//end if launch game
 			
-			
-			
-		}
-		//use to test shoot and strike game
-		if(screen == 6){
-			//hidden buttons
-			nav.setVisible(false);
-			mode.setVisible(false);
-			cat.setVisible(false);
-			menu.setVisible(false);
-			start.setVisible(false);
-			gamesCat.setVisible(false);
-			games.setVisible(false);
-			
 			if(shootAndStrike){
+				gameNav.setVisible(true);
+				games.setVisible(false);
 				
-				//need to change the parameter
-				loadCurrentCategory("Fruits");
-				//Pass the arraylist to the function load up random items from category
-				chooseRandomItems(CurCatItems);
-				
-				//copies random items to another array list
-				for(CurrentCategory o : randomItems){
-					copyRandomItems.add(o);
-				}
-				//leave 5 elements in copyRandomItems and delete the rest
-				for(int i = 0; i < randomItems.size()-5;i++){
-					copyRandomItems.remove(i);
-				}
-				
-				shootAndStrike = false;
-			}
-			
-			if(createTarget){
-				for(int i = 0 ; i < 5;i++){
-					 Target target = new Target(this,(border + random(400)),(border + (border  * i)),15);
-					 gameObjects.add(target);
-				}
-			 createTarget = false;
-			}
-			
-			if(createBall){
-				//creates a new instance of ball
-				 Ball ball = new Ball(this,width/2,height-(border*2),25);
-				 gameObjects.add(ball);
-				 createBall = false;
-			}
-			
-			if(hitTarget){
-				fill(0);
-				rect(0,height/4, width,width/2);
-				if(chooseWord){
-					loc = (int) random(copyRandomItems.size());
-					//use word to locate image and audio files
-					word = copyRandomItems.get(loc).eng;
+				if(startShootAndStrike){
+					setupShootAndStrike();
 					
-					for(int i = 0 ; i < 3; i++){
-						//if i doesnt already match the current location of the choosen word
-						if(i != loc){
-							Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, "Fruits", copyRandomItems.get(i).fr);
-							gameObjects.add(tile);
-						}
-						//if i does match the location of the chosen word
-						else{
-							Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, "Fruits", copyRandomItems.get(i).fr);
-							gameObjects.add(tile);
-						}
-						
-					}
-					chooseWord = false;
-					//choosen random number between 0,1,2 in order to give the correct picture a random location each time 
 				}
 				
-				textSize(30);
-				fill(255);
-				textAlign(CENTER,CENTER);
-				text(copyRandomItems.get(loc).fr,width/2,height/3);
-				System.out.println(word);
+				if(createTarget){
+					for(int i = 0 ; i < 5;i++){
+						 Target target = new Target(this,(border + random(400)),(border + (border  * i)),15);
+						 gameObjects.add(target);
+					}
+				 createTarget = false;
+				}
 				
+				if(createBall){
+					//creates a new instance of ball
+					 Ball ball = new Ball(this,width/2,height-(border*2),25);
+					 gameObjects.add(ball);
+					 createBall = false;
+				}
+				
+				if(hitTarget){
+					hitTarget();
+				}
 				
 				for(int i = 0; i < gameObjects.size(); i++){
 					GameObject go = gameObjects.get(i);
-					if(go instanceof Tile){
-						((Tile)go).update();
-						((Tile)go).render();
+					if(!hitTarget){
+						if(go instanceof Ball){
+							((Ball)go).aim();
+						}
 					}
+					
+					if(!hitTarget){
+						go.update();
+						go.render();
+					}
+					
+					
 				}
-				//need to load up randomitems array and choose one image and text.
-				
-			}
+				checkBallCollisions();
+			}//end shoot and strike
 			
-			for(int i = 0; i < gameObjects.size(); i++){
-				GameObject go = gameObjects.get(i);
-				if(go instanceof Ball){
-					((Ball)go).aim();
-				}
-				if(!hitTarget){
-					go.update();
-					go.render();
-				}
-				
-				
-			}
-			checkBallCollisions();
+			
 			
 		}
 		
+	}
 	
+	public void setupShootAndStrike(){
+		//need to change the parameter
+		loadCurrentCategory(catName);
+		//Pass the arraylist to the function load up random items from category
+		chooseRandomItems(CurCatItems);
+		
+		for(int i = 0; i < copyRandomItems.size();i++){
+			copyRandomItems.remove(i);
+		}
+		
+		//copies random items to another array list
+		for(CurrentCategory o : randomItems){
+			copyRandomItems.add(o);
+		}
+		//leave 5 elements in copyRandomItems and delete the rest
+		for(int i = 0; i < randomItems.size()-5;i++){
+			copyRandomItems.remove(i);
+		}
 		
 		
+		startShootAndStrike = false;
+	}
+	
+	public void hitTarget(){
+		fill(0);
+		rect(0,height/4, width,width/2);
+		
+		//places a tile into word variable this will be our correct word
+		if(chooseWord){
+			//use loc to choose a place in array for it
+			loc = (int) random(2);
+			//use word to locate image and audio files
+			word = copyRandomItems.get(loc).eng;
+			
+			for(int i = 0 ; i < 3; i++){
+				//if i doesnt already match the current location of the choosen word
+				if(i != loc){
+					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr);
+					gameObjects.add(tile);
+				}
+				//if i does match the location of the chosen word
+				else{
+					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr);
+					gameObjects.add(tile);
+				}
+				
+			}
+			chooseWord = false;
+			//choosen random number between 0,1,2 in order to give the correct picture a random location each time 
+		}
+		
+		textSize(30);
+		fill(255);
+		textAlign(CENTER,CENTER);
+		text(copyRandomItems.get(loc).fr,width/2,height/3);
+		
+		
+		//updates and renders the tiles currently in play
+		//also detects selected tiles and checks to see if it is the correct answer
+		for(int i = 0; i < gameObjects.size(); i++){
+			GameObject go = gameObjects.get(i);
+			if(go instanceof Tile){
+				
+				go.update();
+				go.render();
+				
+				if(((Tile)go).selected == true){
+					if(((Tile)go).id == word){
+						System.out.println("Well Done");
+					}
+					else{
+						System.out.println("Wrong");
+					}
+					
+					for(int j = 0; j < gameObjects.size(); j++){
+						GameObject t = gameObjects.get(j);
+						if(t instanceof Ball){
+							gameObjects.remove(t);
+						}
+					}
+					
+					startShootAndStrike = true;
+					createBall = true;
+					chooseWord = true;
+					hitTarget = false;
+					
+					
+				}
+				
+				
+				
+			}
+		}
 	}
 	
 	//checks ball and target collisions
@@ -580,6 +642,7 @@ public class Application extends PApplet {
 			    }
 		}
 	}
+	
 	
 	public static void main(String args[]) {
 	    PApplet.main(new String[] { "--present", "Application" });
@@ -987,6 +1050,57 @@ public class Application extends PApplet {
 			setUpMatchGame = true;
 		}
 		
+	}
+	
+	public void ShootAndStrike(){
+		if(count > 0){
+			click = true;
+			shootAndStrike = true;
+			startShootAndStrike = true;
+			createTarget = true;
+			hitTarget = false;
+			createBall = true;
+			setupShootAndStrike();
+		}
+		
+	}
+	public void Back1(){
+		if(count > 0){
+			if(matchGame){
+				matchGame = false;
+			}
+			if(wordLaunchGame){
+				wordLaunchGame = false;
+			}
+			if(shootAndStrike){
+				shootAndStrike = false;
+			}
+			score = 0;
+			//reinitializes gameobjects to 0
+			while(gameObjects.size() > 0){
+			for(int i  = 0 ; i < gameObjects.size();i++){
+				gameObjects.remove(i);
+				System.out.println("Removing all objects");
+			}
+			}
+			System.out.println(randomItems.size());
+			while(randomItems.size() > 0){
+				for(int i  = 0 ; i < randomItems.size();i++){
+					randomItems.remove(i);
+					System.out.println("Removing all objects");
+				}
+			}
+			System.out.println(randomItems.size());
+			
+			System.out.println(copyRandomItems.size());
+			while(copyRandomItems.size() > 0){
+				for(int i  = 0 ; i < copyRandomItems.size();i++){
+					copyRandomItems.remove(i);
+					System.out.println("Removing all objects");
+				}
+			}
+			System.out.println(copyRandomItems.size());
+		}
 	}
 	
 	public void Back(){

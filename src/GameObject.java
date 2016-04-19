@@ -21,10 +21,10 @@ abstract public class GameObject extends PApplet{
 	public String id;
 	
 	public GameObject(){
-     this(null, 50, 50, 50);
+     this(50, 50, 50);
     }
 	
-	public GameObject(PApplet p, float x, float y,float w){
+	public GameObject(float x, float y,float w){
 		pos = new PVector(x, y);
 		this.halfW = w * 0.5f;
 	}
