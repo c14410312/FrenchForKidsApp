@@ -36,17 +36,39 @@ public class Ball extends GameObject implements MouseListener  {
 		x = x + deltaX;
 		y = y + deltaY;
 		System.out.println("Updating");
+		
+		if (x > parent.width-ballWidth/2 || x < ballWidth/2)
+		  {
+		    deltaX = -deltaX;
+		    deltaX = (float) (deltaX * 0.6);
+		    if (x < ballWidth/2)
+		    {
+		    x = ballWidth/2;
+		  }
+		    else
+		    {x = parent.width-ballWidth/2;
+		  }
+		  }
+		  if (y > parent.width-ballWidth/2 || y < ballWidth/2)
+		  {
+		    deltaY = -deltaY;
+		    deltaY = (float) (deltaY * 0.6);
+		    if (y < ballWidth/2)
+		    {y = ballWidth/2;
+		  }
+		    else
+		    {y = parent.width-ballWidth/2;
+		  }
+		  }
 	}
 
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 			
-		  parent.noStroke();
-		  parent.fill(255);
-		  parent.ellipse (x-5, y-5, ballWidth, ballWidth);
-		  parent.fill(125);
-		  parent.stroke(125);
+		  
+		  parent.fill(0);
+		  parent.stroke(0);
 		  parent.ellipse (x, y, ballWidth, ballWidth);
 		  parent.stroke (0);
 		  parent.noFill();
@@ -73,10 +95,6 @@ public class Ball extends GameObject implements MouseListener  {
 		}
 	}
 	
-	public void launchBall(){
-	  x = x + deltaX;
-	  y = y + deltaY;
-	}
 	
 	public void mousePressed(MouseEvent e){
 		

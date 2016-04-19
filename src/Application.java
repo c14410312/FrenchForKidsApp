@@ -25,6 +25,7 @@ public class Application extends PApplet {
 	int timer = 0;
 	boolean click = false;
 	boolean buttonClicked = false;
+	boolean createTarget = true;
 	boolean newItem = true;
 	//used to navigate through selected category
 	int i = 0;
@@ -89,11 +90,7 @@ public class Application extends PApplet {
 	    screen = 6;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
-	    
-	  //creates a new instance of ball
-	  Ball ball = new Ball(this,width/2,height-(border*2),25);
-	  gameObjects.add(ball);
-	    
+	 
 		
 	    //****************BUTTONS**********************
 	    
@@ -439,19 +436,29 @@ public class Application extends PApplet {
 			gamesCat.setVisible(false);
 			games.setVisible(false);
 			
-			
+			if(createTarget){
+			 Target target = new Target(this,width/4,height/4,20);
+			 gameObjects.add(target);
+			 
+			//creates a new instance of ball
+			 Ball ball = new Ball(this,width/2,height-(border*2),25);
+			 gameObjects.add(ball);
+			 createTarget = false;
+			}
 			
 			for(int i = 0; i < gameObjects.size(); i++){
 				GameObject go = gameObjects.get(i);
 				if(go instanceof Ball){
 					((Ball)go).aim();
-					go.render();
-					go.update();
 				}
+				go.update();
+				go.render();
 				
 			}
 			
 		}
+		
+		
 	}
 	
 	//used when user tries to click more than 2 tiles at once
