@@ -84,7 +84,7 @@ public class Application extends PApplet {
 	public void setup() {
 	    size(500,500);
 	    background(255);
-	    screen = 2;
+	    screen = 6;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
 	    
@@ -422,6 +422,22 @@ public class Application extends PApplet {
 			
 			
 		}
+		//use to test shoot and strike game
+		if(screen == 6){
+			//hidden buttons
+			nav.setVisible(false);
+			mode.setVisible(false);
+			cat.setVisible(false);
+			menu.setVisible(false);
+			start.setVisible(false);
+			gamesCat.setVisible(false);
+			games.setVisible(false);
+			
+			Ball ball = new Ball(this,width/2,height-border,25);
+			gameObjects.add(ball);
+			
+			ball.render();
+		}
 	}
 	
 	//used when user tries to click more than 2 tiles at once
@@ -605,6 +621,7 @@ public class Application extends PApplet {
 	public void categories(){
 		
 	}
+	//function delay()
 	public void delay(int delay){
 		int time = millis();
 		while(millis() - time <= delay);
