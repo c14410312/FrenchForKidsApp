@@ -81,12 +81,18 @@ public class Application extends PApplet {
 	  keys[keyCode] = false;
 	}
 	
+	
+	
 	public void setup() {
 	    size(500,500);
 	    background(255);
 	    screen = 6;
 	    //add font to program
 	    myFont = createFont("Funnier.ttf", 32);
+	    
+	  //creates a new instance of ball
+	  Ball ball = new Ball(this,width/2,height-(border*2),25);
+	  gameObjects.add(ball);
 	    
 		
 	    //****************BUTTONS**********************
@@ -433,10 +439,18 @@ public class Application extends PApplet {
 			gamesCat.setVisible(false);
 			games.setVisible(false);
 			
-			Ball ball = new Ball(this,width/2,height-border,25);
-			gameObjects.add(ball);
 			
-			ball.render();
+			
+			for(int i = 0; i < gameObjects.size(); i++){
+				GameObject go = gameObjects.get(i);
+				if(go instanceof Ball){
+					((Ball)go).aim();
+					go.render();
+					go.update();
+				}
+				
+			}
+			
 		}
 	}
 	
