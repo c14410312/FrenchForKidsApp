@@ -25,6 +25,8 @@ public class Application extends PApplet {
 	int score = 0;
 	int timer = 0;
 	int loc = 0;
+	boolean playFirst = true;
+	boolean playLast = true;
 	boolean click = false;
 	boolean buttonClicked = false;
 	static boolean hitTarget = false;
@@ -142,7 +144,7 @@ public class Application extends PApplet {
 	    menu.addButton("Back")
 	    .setValue(1)
 	     .setPosition(5,5)
-	     .setSize(150,50)
+	     .setSize(50,50)
 	     .addCallback(new CallbackListener() {
 	        @SuppressWarnings("deprecation")
 			public void controlEvent(CallbackEvent event) {
@@ -337,6 +339,7 @@ public class Application extends PApplet {
 		if(screen == 4){
 			//visible buttons
 			gamesCat.setVisible(true);
+			gameNav.setVisible(true);
 			
 			//hidden buttons
 			nav.setVisible(false);
@@ -345,7 +348,7 @@ public class Application extends PApplet {
 			menu.setVisible(false);
 			start.setVisible(false);
 			games.setVisible(false);
-			gameNav.setVisible(false);
+			
 			
 			//load the chosen category 
 			
@@ -356,6 +359,7 @@ public class Application extends PApplet {
 		if(screen == 5){
 			//visible buttons
 			games.setVisible(true);
+			gameNav.setVisible(true);
 			
 			
 			//hidden buttons
@@ -370,7 +374,7 @@ public class Application extends PApplet {
 			//if matchGame is selected
 			if(matchGame){
 				games.setVisible(false);
-				gameNav.setVisible(true);
+				
 				
 				if(setUpMatchGame)
 				{
@@ -860,16 +864,35 @@ public class Application extends PApplet {
 		//sets navigation buttons to visible
 		nav.setVisible(true);
 	    
+		
+		
 		//handles if i goes beyond the array
 	    if(i == maxSize + 1){
 	    	i = 0;
+	    	playFirst = true;
 	    }
 	    if(i < 0 ){
 	    	i = maxSize;
+	    	playLast = true;
 	    }
-	        
-	    //gets the matching Text for value in x
+	  //gets the matching Text for value in x
 	    String x = CurCatItems.get(i).eng;
+	    
+	    if(playFirst){
+		    minim = new Minim(this);
+			track = minim.loadFile("Audio/"+catName+"/"+x+".mp3");
+	        track.rewind();
+	        track.play();
+	        playFirst = false;
+	    }
+	    if(playLast){
+		    minim = new Minim(this);
+			track = minim.loadFile("Audio/"+catName+"/"+x+".mp3");
+	        track.rewind();
+	        track.play();
+	        playLast = false;
+	    }
+	    
 	    //gets the matching picture for value in x
 	    img = loadImage("Images/"+cat+"/"+x+".jpg");
 	    //gets the matching audio for value in x
@@ -969,7 +992,9 @@ public class Application extends PApplet {
 			i=0;
 			catName = "Numbers";
 			buttonClicked = true;
+			playFirst = true;
 			screen = 3;
+			
 		}
 	}
 	//if the button Alphabet is selected it loads that into the current category
@@ -979,6 +1004,7 @@ public class Application extends PApplet {
 			i= 0;
 			catName = "Alphabet";
 			buttonClicked = true;
+			playFirst = true;
 			screen = 3;
 		}
 	}
@@ -988,6 +1014,7 @@ public class Application extends PApplet {
 			i= 0;
 			catName = "Family";
 			buttonClicked = true;
+			playFirst = true;
 			screen = 3;
 		}
 	}
@@ -997,6 +1024,7 @@ public class Application extends PApplet {
 			i= 0;
 			catName = "Fruits";
 			buttonClicked = true;
+			playFirst = true;
 			screen = 3;
 		}
 	}
@@ -1066,6 +1094,12 @@ public class Application extends PApplet {
 	}
 	public void Back1(){
 		if(count > 0){
+			if(screen == 4){
+				screen = 1;
+			}
+			if(screen == 5 && !matchGame && !wordLaunchGame && !shootAndStrike){
+				screen = 4;
+			}
 			if(matchGame){
 				matchGame = false;
 			}
