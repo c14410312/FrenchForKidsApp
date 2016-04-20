@@ -51,6 +51,7 @@ public class MotionTile extends GameObject implements MouseListener {
 			//gets the matching picture for value in x
 		    //gets the matching audio for value in x
 		    //parent.imageMode(PConstants.CENTER);
+		    parent.tint(255,255);
 		    parent.image(img, x, y, w, w);
 		    parent.noFill();
 		    parent.noStroke();

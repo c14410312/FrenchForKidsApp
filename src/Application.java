@@ -216,6 +216,21 @@ public class Application extends PApplet {
 		 .setPosition(150,300)
 		 .setSize(200,50)
 		 ;
+		cat.addButton("Animals")
+		 .setValue(3)
+		 .setPosition(150,350)
+		 .setSize(200,50)
+		 ;
+		cat.addButton("Colours")
+		 .setValue(3)
+		 .setPosition(150,400)
+		 .setSize(200,50)
+		 ;
+		cat.addButton("Body")
+		 .setValue(3)
+		 .setPosition(150,450)
+		 .setSize(200,50)
+		 ;
 		
 		//game choice buttons
 		games = new ControlP5(this);
@@ -249,6 +264,21 @@ public class Application extends PApplet {
 		gamesCat.addButton("Family1")
 	     .setValue(1)
 	     .setPosition(150,250)
+	     .setSize(200,50)
+	     ;
+		gamesCat.addButton("Colours1")
+	     .setValue(1)
+	     .setPosition(150,300)
+	     .setSize(200,50)
+	     ;
+		gamesCat.addButton("Body1")
+	     .setValue(1)
+	     .setPosition(150,350)
+	     .setSize(200,50)
+	     ;
+		gamesCat.addButton("Animals1")
+	     .setValue(1)
+	     .setPosition(150,400)
 	     .setSize(200,50)
 	     ;
 		
@@ -421,6 +451,17 @@ public class Application extends PApplet {
 				// 1. Set up the game
 				if(setUpWordLaunchGame == true){
 					
+					for(int i = 0; i < gameObjects.size(); i++){
+						GameObject go = gameObjects.get(i);
+						if(go instanceof MotionTile){
+							
+							if(((MotionTile)go).selected){
+								((MotionTile)go).selected = false;
+							}
+						}
+						
+					}
+					
 					//need to change the parameter
 					loadCurrentCategory(catName);
 					//Pass the arraylist to the function load up random items from category
@@ -454,8 +495,12 @@ public class Application extends PApplet {
 				for(int i = 0; i < gameObjects.size(); i++){
 					GameObject go = gameObjects.get(i);
 					if(go instanceof MotionTile){
-						go.render();
-						go.update();
+						
+						if(((MotionTile)go).selected){
+							((MotionTile)go).selected = false;
+						}
+						((MotionTile)go).render();
+						((MotionTile)go).update();
 					}
 					
 				}
@@ -873,7 +918,12 @@ public class Application extends PApplet {
 		String cat = catName;
 		//sets navigation buttons to visible
 		nav.setVisible(true);
-	    
+		
+		textFont(myFont);
+	    textAlign(CENTER,CENTER);
+	    fill(0);
+	    textSize(24);
+	    text(catName,width/2, border);
 		
 		
 		//handles if i goes beyond the array
@@ -1039,11 +1089,75 @@ public class Application extends PApplet {
 		}
 	}
 	
+	public void Animals(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
+			catName = "Animals";
+			buttonClicked = true;
+			playFirst = true;
+			screen = 3;
+		}
+	}
+	public void Body(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
+			catName = "Body";
+			buttonClicked = true;
+			playFirst = true;
+			screen = 3;
+		}
+	}
+	public void Colours(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i= 0;
+			catName = "Colours";
+			buttonClicked = true;
+			playFirst = true;
+			screen = 3;
+		}
+	}
+	
 	public void Numbers1(){
 		if(count > 0){
 			//ensure to reinitialize i to ensure it ends up at the start of the list
 			i=0;
 			catName = "Numbers";
+			click = true;
+			buttonClicked = true;
+			screen = 5;
+		}
+	}
+	
+	public void Body1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Body";
+			click = true;
+			buttonClicked = true;
+			screen = 5;
+		}
+	}
+	
+	public void Animals1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Animals";
+			click = true;
+			buttonClicked = true;
+			screen = 5;
+		}
+	}
+	
+	public void Colours1(){
+		if(count > 0){
+			//ensure to reinitialize i to ensure it ends up at the start of the list
+			i=0;
+			catName = "Colours";
 			click = true;
 			buttonClicked = true;
 			screen = 5;
