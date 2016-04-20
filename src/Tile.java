@@ -24,14 +24,15 @@ public class Tile extends GameObject implements MouseListener {
     PImage img;
 	String cat;
 	String fr;
-	AudioPlayer track;
-	Minim minim = new Minim(this);
 	
-	Tile(PApplet p, float x, float y, String id, int type, String cat, String fr){
+	  Tile(){
+	     super(500/4, 500/4, 50);
+	  }
+	
+	Tile(PApplet p, float x, float y, String id, int type, String cat, String fr, float w){
+		super(x, y, w); 
 		parent = p;
-		this.x = x;
-		this.y = y;
-		this.w = 80;
+		this.w = w;
 		this.id = id;
 		this.type = type;
 		this.cat = cat;
@@ -41,7 +42,7 @@ public class Tile extends GameObject implements MouseListener {
 	}
 	
 	public void render(){
-		if(overTile(x,y,w)){
+		if(overTile(pos.x,pos.y,w)){
 			color = 122;
 		}
 		
@@ -58,18 +59,18 @@ public class Tile extends GameObject implements MouseListener {
 		    //parent.imageMode(PConstants.CENTER);
 		    parent.tint(255,tint);
 		    parent.imageMode(0);
-		    parent.image(img, x, y, w, w);
+		    parent.image(img, pos.x, pos.y, w, w);
 		    parent.noFill();
 		    parent.noStroke();
-			parent.rect(x,y,w,w);
+			parent.rect(pos.x,pos.y,w,w);
 		}
 		if(type == 1){
 			parent.fill(color);
-			parent.rect(x, y, w, w);
+			parent.rect(pos.x, pos.y, w, w);
 			parent.fill(255);
 			parent.textSize(8);
 			parent.textAlign(PConstants.CENTER);
-			parent.text(fr,x+w/2,y+w/2);
+			parent.text(fr,pos.x+w/2,pos.y+w/2);
 		}
 	}
 
@@ -79,6 +80,11 @@ public class Tile extends GameObject implements MouseListener {
 		if(Application.hitTarget == false && Application.shootAndStrike == true){
 			Application.gameObjects.remove(this);
 			selected = !selected;
+		}
+		
+		if(selected && Application.correct == true){
+			Application.gameObjects.remove(this);
+			System.out.println("Deleting Object");
 		}
 	}
 	
@@ -105,14 +111,9 @@ public class Tile extends GameObject implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(overTile(x,y,w)){
+		if(overTile(pos.x,pos.y,w)){
 			selected = !selected;
 			System.out.println("tile id: " + id + "Type:" + type);
-			if(Application.matchGame == true){
-				track = minim.loadFile("Button.mp3");
-				track.rewind();
-				track.play();
-			}
 		}
 		
 	}

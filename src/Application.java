@@ -29,6 +29,7 @@ public class Application extends PApplet {
 	boolean playLast = true;
 	boolean click = false;
 	boolean buttonClicked = false;
+	static boolean correct = false;
 	static boolean hitTarget = false;
 	boolean createTarget = true;
 	static boolean createBall = true;
@@ -403,7 +404,7 @@ public class Application extends PApplet {
 					}
 					
 					//function to constantly check which tiles are selected
-					checkSelected();
+					correct = checkSelected();
 				
 					if(selectedCount >= 2){
 						deSelectAll();
@@ -463,6 +464,11 @@ public class Application extends PApplet {
 			if(shootAndStrike){
 				gameNav.setVisible(true);
 				games.setVisible(false);
+				
+				textSize(30);
+				fill(0);
+				textAlign(CENTER,CENTER);
+				text(score + "/5", width-border, border);
 				
 				if(startShootAndStrike){
 					setupShootAndStrike();
@@ -549,12 +555,12 @@ public class Application extends PApplet {
 			for(int i = 0 ; i < 3; i++){
 				//if i doesnt already match the current location of the choosen word
 				if(i != loc){
-					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr);
+					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr, 80);
 					gameObjects.add(tile);
 				}
 				//if i does match the location of the chosen word
 				else{
-					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr);
+					Tile tile = new Tile(this,(border*2) + (110 * i),height/2,copyRandomItems.get(i).eng, 0, catName, copyRandomItems.get(i).fr,80);
 					gameObjects.add(tile);
 				}
 				
@@ -581,9 +587,11 @@ public class Application extends PApplet {
 				if(((Tile)go).selected == true){
 					if(((Tile)go).id == word){
 						System.out.println("Well Done");
-					}
-					else{
-						System.out.println("Wrong");
+						minim = new Minim(this);
+						track = minim.loadFile("Audio/"+catName+"/"+word+".mp3");
+						track.rewind();
+						track.play();
+						score++;
 					}
 					
 					for(int j = 0; j < gameObjects.size(); j++){
@@ -652,7 +660,7 @@ public class Application extends PApplet {
 	    PApplet.main(new String[] { "--present", "Application" });
 	}
 	
-	public void checkSelected(){
+	public boolean checkSelected(){
 		String var1 = null;
 		String var2 = null;
 		int var1Pos = 0;
@@ -697,7 +705,9 @@ public class Application extends PApplet {
 			track.play();
 			gameObjects.remove(var1Pos);
 			gameObjects.remove(var2Pos);
+
 		}
+		return correct;
 	}
 	
 	public void startScreen(){
@@ -939,7 +949,7 @@ public class Application extends PApplet {
 					if(type){
 						t = 1;
 					}
-					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr);
+					Tile tile = new Tile(this,x,y,randomItems.get(k).eng, t, cat, randomItems.get(k).fr,80);
 					gameObjects.add(tile);
 					x += 90;
 					type = !type;
@@ -1064,24 +1074,29 @@ public class Application extends PApplet {
 	
 	public void WordLaunch(){
 		if(count > 0){
+			reInitialize();
 			click = true;
 			wordLaunchGame = true;
 			setUpWordLaunchGame = true;
+			score = 0;
 		}
 		
 	}
 	
 	public void MatchGame(){
 		if(count > 0){
+			reInitialize();
 			click = true;
 			matchGame = true;
 			setUpMatchGame = true;
+			score = 0;
 		}
 		
 	}
 	
 	public void ShootAndStrike(){
 		if(count > 0){
+			reInitialize();
 			click = true;
 			shootAndStrike = true;
 			startShootAndStrike = true;
@@ -1089,6 +1104,7 @@ public class Application extends PApplet {
 			hitTarget = false;
 			createBall = true;
 			setupShootAndStrike();
+			score = 0;
 		}
 		
 	}
@@ -1110,18 +1126,20 @@ public class Application extends PApplet {
 				shootAndStrike = false;
 			}
 			score = 0;
-			//reinitializes gameobjects to 0
-			while(gameObjects.size() > 0){
+			reInitialize();
+			
+		}
+	}
+	
+	public void reInitialize(){
+		while(gameObjects.size() > 0){
 			for(int i  = 0 ; i < gameObjects.size();i++){
 				gameObjects.remove(i);
-				System.out.println("Removing all objects");
 			}
 			}
-			System.out.println(randomItems.size());
 			while(randomItems.size() > 0){
 				for(int i  = 0 ; i < randomItems.size();i++){
 					randomItems.remove(i);
-					System.out.println("Removing all objects");
 				}
 			}
 			System.out.println(randomItems.size());
@@ -1130,11 +1148,16 @@ public class Application extends PApplet {
 			while(copyRandomItems.size() > 0){
 				for(int i  = 0 ; i < copyRandomItems.size();i++){
 					copyRandomItems.remove(i);
+				}
+			}
+			System.out.println(CurCatItems.size());
+			while(CurCatItems.size() > 0){
+				for(int i  = 0 ; i < CurCatItems.size();i++){
+					CurCatItems.remove(i);
 					System.out.println("Removing all objects");
 				}
 			}
-			System.out.println(copyRandomItems.size());
-		}
+			System.out.println(CurCatItems.size());
 	}
 	
 	public void Back(){

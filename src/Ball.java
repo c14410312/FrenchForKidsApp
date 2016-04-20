@@ -3,6 +3,8 @@ import java.awt.event.MouseListener;
 
 import org.w3c.dom.events.MouseEvent;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.PApplet;
 
 public class Ball extends GameObject implements MouseListener  {
@@ -33,11 +35,13 @@ public class Ball extends GameObject implements MouseListener  {
 		this.ballWidth = w;
 		parent.addMouseListener(this);
 	}
+
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
 		if(Application.hitTarget == true){
 			Application.gameObjects.remove(this);
+			
 		}
 		
 		pos.x = pos.x + deltaX;
@@ -121,7 +125,6 @@ public class Ball extends GameObject implements MouseListener  {
 		System.out.println("Mouse released");
 	  deltaX = (pos.x - parent.mouseX)/33;
 	  deltaY = (pos.y - parent.mouseY)/33;
-	  System.out.println(deltaX);
 	}
 	
 
